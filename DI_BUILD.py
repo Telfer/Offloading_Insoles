@@ -338,14 +338,14 @@ def DI_BUILD():
         toe_lat = [toe_lat_x[size + 1], toe_lat_y[size + 1], -3]
         ff_med = [ff_med_x[size + 1], ff_med_y[size + 1], -3]
         ff_lat = [ff_lat_x[size + 1], ff_lat_y[size + 1], -3]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, (ff_med[1] + ff_lat[1]) / 2, -3]
+        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -3]
     else:
         toe = [toe_pt_x[size + 1] * - 1, toe_pt_y[size + 1], -3]
         toe_med = [toe_med_x[size + 1] * -1, toe_med_y[size + 1], -3]
         toe_lat = [toe_lat_x[size + 1] * -1, toe_lat_y[size + 1], -3]
         ff_med = [ff_med_x[size + 1] * -1, ff_med_y[size + 1], -3]
         ff_lat = [ff_lat_x[size + 1] * -1, ff_lat_y[size + 1], -3]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, (ff_med[1] + ff_lat[1]) / 2, -3]
+        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -3]
     
     ### heel points
     heel_center = [0, heel_center_pt_y[size + 1], heel_cup_height]
@@ -393,13 +393,14 @@ def DI_BUILD():
                              arch_center_lat, arch_lateral])
     
     ### construct forefoot curve
-    forefoot_curve1 = make_curve([mtpj1_prox, mtpj2_prox, mtpj_mid_prox, 
+    forefoot_curve1 = make_curve([mtpj1_prox, mtpj2_prox, mtpj3_prox, 
                                   mtpj4_prox, mtpj5_prox])
-    forefoot_curve2 = make_curve([mtpj1, mtpj2, mtpj_mid, mtpj4, mtpj5]) 
-    forefoot_curve3 = make_curve([mtpj1_dist1, mtpj2_dist1, mtpj_mid_dist1, 
+    forefoot_curve2 = make_curve([mtpj1, mtpj2, mtpj3, mtpj4, mtpj5]) 
+    forefoot_curve3 = make_curve([mtpj1_dist1, mtpj2_dist1, mtpj3_dist1, 
                                   mtpj4_dist1, mtpj5_dist1])
-    forefoot_curve4 = make_curve([mtpj1_dist2, mtpj2_dist2, mtpj_mid_dist2, 
+    forefoot_curve4 = make_curve([mtpj1_dist2, mtpj2_dist2, mtpj3_dist2, 
                                   mtpj4_dist2, mtpj5_dist2])
+    forefoot_curve5 = make_curve([ff_lat, ff_mid, ff_med])
     
     ### construct heel curve
     cross_curve_heel = make_curve([heel_medial, heel_midm, heel_mid, heel_midl, 
@@ -408,12 +409,13 @@ def DI_BUILD():
     ### make top surface
     top = rs.AddNetworkSrf([medial_curve, lateral_curve, arch_curve,
                             forefoot_curve1, forefoot_curve2, forefoot_curve3, 
-                            forefoot_curve4, cross_curve_heel, central_curve])
+                            forefoot_curve4, forefoot_curve5, 
+                            cross_curve_heel, central_curve])
     
     ### tidy up
-    rs.DeleteObjects([medial_curve, lateral_curve, central_curve, 
-                      arch_curve, forefoot_curve1, forefoot_curve2, 
-                      forefoot_curve3, forefoot_curve4, cross_curve_heel])
+    #rs.DeleteObjects([medial_curve, lateral_curve, central_curve, 
+    #                  arch_curve, forefoot_curve1, forefoot_curve2, 
+    #                  forefoot_curve3, forefoot_curve4, cross_curve_heel])
     
     
     # =========================================================================
