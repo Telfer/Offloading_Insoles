@@ -59,12 +59,12 @@ def DI_BUILD():
         curve = rs.AddInterpCurve(points, degree = 3, knotstyle = 2)
         return curve
     
-    def lm_inter(insole_curve, lm, dir):
+    def lm_inter(insole_curve, lm_y, dir):
         if dir == "R":
-            x_curve = rs.AddLine([0, lm[1], 0], [100, lm[1], 0])
+            x_curve = rs.AddLine([0, lm_y, 0], [100, lm_y, 0])
             x = rs.CurveCurveIntersection(insole_curve, x_curve)[0][1]
         else:
-            x_curve = rs.AddLine([0, lm[1], 0], [-100, lm[1], 0])
+            x_curve = rs.AddLine([0, lm_y, 0], [-100, lm_y, 0])
             x = rs.CurveCurveIntersection(insole_curve, x_curve)[0][1]
         rs.DeleteObject(x_curve)
         return x
@@ -288,7 +288,7 @@ def DI_BUILD():
                                          mid_outline, scan)
     
     ### lateral arch points
-    arch_lateral = lm_inter(mid_outline, arch_lateral_lm, dir2)
+    arch_lateral = lm_inter(mid_outline, arch_lateral_lm[1], dir2)
     arch_lateral[2] = arch_lateral_lm[2]
     
     ### mtpj1 points
@@ -345,7 +345,7 @@ def DI_BUILD():
         toe_lat = [toe_lat_x[size + 1] * -1, toe_lat_y[size + 1], -3]
         ff_med = [ff_med_x[size + 1] * -1, ff_med_y[size + 1], -3]
         ff_lat = [ff_lat_x[size + 1] * -1, ff_lat_y[size + 1], -3]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -3]
+        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 15, -3]
     
     ### heel points
     heel_center = [0, heel_center_pt_y[size + 1], heel_cup_height]
@@ -411,67 +411,82 @@ def DI_BUILD():
                             forefoot_curve1, forefoot_curve2, forefoot_curve3, 
                             forefoot_curve4, forefoot_curve5, 
                             cross_curve_heel, central_curve])
-    
-    ### tidy up
-    #rs.DeleteObjects([medial_curve, lateral_curve, central_curve, 
-    #                  arch_curve, forefoot_curve1, forefoot_curve2, 
-    #                  forefoot_curve3, forefoot_curve4, cross_curve_heel])
+    #rs.RebuildSurface(top, pointcount = (50, 10))
     
     
     # =========================================================================
     
     # rebuild mid outline
-    #mtpj1_prox_mo = lm_inter(mid_outline, mtpj1_prox, dir1)
-    #mtpj1_prox_mo[2] = mtpj1_prox_mo[2] + 2
-    #mtpj1_mo = lm_inter(mid_outline, mtpj1, dir1)
-    #mtpj1_dist1_mo = lm_inter(mid_outline, mtpj1_dist1, dir1)
-    #mtpj1_dist2_mo = lm_inter(mid_outline, mtpj1_dist2, dir1)
-    #mtpj5_prox_mo = lm_inter(mid_outline, mtpj5_prox, dir2)
-    #mtpj5_prox_mo[2] = mtpj5_prox_mo[2] + 1
-    #mtpj5_mo = lm_inter(mid_outline, mtpj5, dir2)
-    #mtpj5_dist1_mo = lm_inter(mid_outline, mtpj5_dist1, dir2)
-    #mtpj5_dist2_mo = lm_inter(mid_outline, mtpj5_dist2, dir2)
-    #mtpj5_dist1_mo[1] = mtpj5_dist1_mo[1] - 3 
-    #mtpj5_dist2_mo[1] = mtpj5_dist2_mo[1] - 3
-    #heel_center_mo[2] = 10
-    #heel_center_medial_mo[2] = 10
-    #heel_medial_mo[2] = 10
-    #arch_medial_mo[2] = 15
-    #arch_lateral_mo[2] = 10
-    #heel_lateral_mo[2] = 10
-    #heel_center_lateral_mo[2] = 10
-    #heel_center_mo = [heel_center_mo[0], heel_center_mo[1], 10]
+    mtpj1_prox_mo = lm_inter(mid_outline, mtpj1_prox[1], dir1)
+    mtpj1_prox_mo[0] = mtpj1_prox_mo[0] * -1  
+    mtpj1_mo = lm_inter(mid_outline, mtpj1[1] + 5, dir1)
+    mtpj1_mo[0] = mtpj1_mo[0] * -1
+    mtpj1_dist1_mo = lm_inter(mid_outline, mtpj1_dist1[1] + 10, dir1)
+    mtpj1_dist1_mo[0] = mtpj1_dist1_mo[0] * -1 
+    mtpj1_dist2_mo = lm_inter(mid_outline, mtpj1_dist2[1] + 15, dir1)
+    mtpj1_dist2_mo[0] = mtpj1_dist2_mo[0] * -1
+    ff_med_prox_mo = lm_inter(mid_outline, ff_med_mo[1] - 10, dir1)
+    ff_med_prox_mo[0] = ff_med_prox_mo[0] * -1
+    ff_med_dist_mo = lm_inter(mid_outline, ff_med_mo[1] + 5, dir1)
+    ff_med_dist_mo[0] = ff_med_dist_mo[0] * -1
+    mtpj5_prox_mo = lm_inter(mid_outline, mtpj5_prox[1] - 15, dir2)
+    mtpj5_prox_mo[0] = mtpj5_prox_mo[0] * -1  
+    mtpj5_mo = lm_inter(mid_outline, mtpj5[1] - 15, dir2)
+    mtpj5_mo[0] = mtpj5_mo[0] * -1
+    mtpj5_dist1_mo = lm_inter(mid_outline, mtpj5_dist1[1] - 10, dir2)
+    mtpj5_dist1_mo[0] = mtpj5_dist1_mo[0] * -1 
+    mtpj5_dist2_mo = lm_inter(mid_outline, mtpj5_dist2[1] - 10, dir2)
+    mtpj5_dist2_mo[0] = mtpj5_dist2_mo[0] * -1
+    ff_lat_prox_mo = lm_inter(mid_outline, ff_lat_mo[1] - 25, dir2)
+    ff_lat_prox_mo[0] = ff_lat_prox_mo[0] * -1
+    ff_lat_dist_mo = lm_inter(mid_outline, ff_lat_mo[1] + 5, dir2)
+    ff_lat_dist_mo[0] = ff_lat_dist_mo[0] * -1
+    
+    mid_outline = make_curve([heel_center_mo, heel_center_medial_mo,
+                              heel_medial_mo, arch_medial_mo, mtpj1_prox_mo, 
+                              mtpj1_mo, mtpj1_dist1_mo, mtpj1_dist2_mo, 
+                              ff_med_prox_mo, ff_med_mo, ff_med_dist_mo, toe_med_mo, toe_mo, toe_lat_mo,
+                              ff_lat_dist_mo, ff_lat_mo, ff_lat_prox_mo, mtpj5_dist2_mo, mtpj5_dist1_mo, 
+                              mtpj5_mo, mtpj5_prox_mo, arch_lateral_mo, 
+                              heel_lateral_mo, heel_center_lateral_mo, 
+                              heel_center_mo])
+    
+    if side == "RIGHT":
+        plane = rs.WorldYZPlane()
+        xform = rs.XformMirror(plane.Origin, plane.Normal)
+        mid_outline = rs.TransformObject(mid_outline, xform, False)
+        x = rs.TransformObject(x, xform, False)
+    
+    #rs.RebuildCurve(mid_outline, point_count = 500)
     
     
     # =========================================================================
     
     # bottom surface
-    #bottom_outline = rs.MoveObject(bottom_outline, [0, 0, -10])
-    #bottom = rs.AddPlanarSrf([bottom_outline])
+    bottom_outline = rs.MoveObject(bottom_outline, [0, 0, -10])
+    bottom = rs.AddPlanarSrf([bottom_outline])
     
     
     # =========================================================================
     
     # Assemble Insole
     ## smooth bottom edge
-    #mid_outline = rs.MoveObject(mid_outline, [0, 0, -6])
-    #arc = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
-    #                   [heel_center[0], heel_center_pt_y[size], -10], 
-    #                   [0, heel_center_mo[1] + 1.5, -8])
-    #bottom_corner = rs.AddSweep2([bottom_outline, mid_outline], [arc])
-    #rs.DeleteObject(bottom_outline)
+    mid_outline = rs.MoveObject(mid_outline, [0, 0, -6])
+    arc = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
+                       [heel_center[0], heel_center_pt_y[size], -10], 
+                       [0, heel_center_mo[1] + 1.5, -8])
+    bottom_corner = rs.AddSweep2([bottom_outline, mid_outline], [arc])
     
     ## create surface joining top and bottom
-    #top_edge = rs.DuplicateSurfaceBorder(top)
-    ##bottom_edge = rs.DuplicateSurfaceBorder(bottom)
-    #side_surf = rs.AddLoftSrf([top_edge, mid_outline])#bottom_edge])
-    #rs.DeleteObject(mid_outline)
+    top_edge = rs.DuplicateSurfaceBorder(top)
+    shape = rs.AddLine(heel_center, [heel_center_mo[0], heel_center_mo[1], heel_center_mo[2] - 6])
+    side_surf = rs.AddSweep2([top_edge, mid_outline], [shape])
     
     ## join all surfaces to maek solid
-    #FO = rs.JoinSurfaces([side_surf, bottom, bottom_corner, top], delete_input = True)
+    FO = rs.JoinSurfaces([side_surf, bottom, bottom_corner, top], delete_input = True)
     
-    ## delete curve
-    #rs.DeleteObjects(rs.ObjectsByType(4))
+    ## delete curves
+    rs.DeleteObjects(rs.ObjectsByType(4))
     
     ## tidy up layers
     rs.LayerVisible("Heel Medial", False)
