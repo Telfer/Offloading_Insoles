@@ -69,6 +69,29 @@ def DI_BUILD():
         rs.DeleteObject(x_curve)
         return x
     
+    def lm_plane_inter(curve, point, side, ml):
+        if side == "RIGHT" and ml == "med":
+            plane_crv = rs.AddPolyline([[-100, point, 10], [0, point, 10], 
+                                        [0, point, -10], [-100, point, -10], 
+                                        [-100, point, 10]])
+        if side == "RIGHT" and ml == "lat":
+            plane_crv = rs.AddPolyline([[100, point, 10], [0, point, 10], 
+                                        [0, point, -10], [100, point, -10], 
+                                        [100, point, 10]])
+        if side == "LEFT" and ml == "med":
+            plane_crv = rs.AddPolyline([[100, point, 10], [0, point, 10], 
+                                        [0, point, -10], [100, point, -10], 
+                                        [100, point, 10]])
+        if side == "LEFT" and ml == "lat":
+            plane_crv = rs.AddPolyline([[-100, point, 10], [0, point, 10], 
+                                        [0, point, -10], [-100, point, -10], 
+                                        [-100, point, 10]])
+        plane = rs.AddPlanarSrf(plane_crv)
+        intersect_pt = rs.CurveBrepIntersect(curve, plane)[1]
+        intersect_pt = rs.PointCoordinates(intersect_pt)
+        rs.DeleteObjects([plane_crv, plane])
+        return intersect_pt
+    
     
     # =========================================================================
     
@@ -79,8 +102,6 @@ def DI_BUILD():
     # =========================================================================
     
     # get landmark coordinates
-    heel_medial_lm = get_layer_point_coords("Heel Medial")
-    heel_lateral_lm = get_layer_point_coords("Heel Lateral")
     arch_medial_lm = get_layer_point_coords("Arch Medial")
     arch_center_med_lm = get_layer_point_coords("Arch Center Medial")
     arch_center_lm = get_layer_point_coords("Arch Center")
@@ -127,13 +148,13 @@ def DI_BUILD():
     ## outline data points
     heel_center_pt_y = [-126, -132, -126, -134, -115, -122]
     heel_lateral_pt_x = [-24, -30, -22.5, -28.9, -22, -27]
-    heel_lateral_pt_y = [-100, -100, -100, -102, -100, -100]
+    heel_lateral_pt_y = [-100, -100, -100, -102, -95, -100]
     heel_medial_pt_x = [29, 36, 24.9, 33.1, 26.0, 33]
     heel_medial_pt_y = [-100, -100, -100, -100, -100, -100]
     heel_center_medial_x = [18, 20, 16.8, 20.5, 17, 24]
     heel_center_medial_y = [-121, -128, -120, -127, -110, -115]
-    heel_center_lateral_x = [-15, -17.5, -13.9, -17.8, -10, -22]
-    heel_center_lateral_y = [-121, -124.5, -119, -125.4, -110, -110]
+    heel_center_lateral_x = [-15, -17.5, -13.9, -17.8, -19, -22]
+    heel_center_lateral_y = [-121, -124.5, -119, -125.4, -105, -110]
     arch_medial_pt_x = [25, 36, 17.2, 37.4, 21, 38]
     arch_medial_pt_y = [-10, -12.7, -10, -13.3, -10, -10]
     mtpj1_prox_x = [32, 41, 25.6, 43.4, 25, 44]
@@ -195,6 +216,7 @@ def DI_BUILD():
                                  toe_lat, ff_lat, mtpj5_dist2, mtpj5_dist1, 
                                  mtpj5, mtpj5_prox, arch_lateral, heel_lateral, 
                                  heel_center_lateral, heel_center])
+    rs.RebuildCurve(bottom_outline, point_count = 50)
     
     ### mid outline points
     heel_center_mo = [0, heel_center_pt_y[size + 1], 0]
@@ -251,19 +273,16 @@ def DI_BUILD():
     mb_curve_prox = rs.CopyObject(mb_curve, [0, -5, 0])
     mtpj1_mb_prox = intersect_outline(mid_outline, mb_curve_prox, side)[0]
     mtpj5_mb_prox = intersect_outline(mid_outline, mb_curve_prox, side)[1]
-    rs.DeleteObject(mb_curve_prox)
     
     ### mtpj1 dist1 and mtpj5 dist1
     mb_curve_dist1 = rs.CopyObject(mb_curve, [0, 8, 0])
     mtpj1_mb_dist1 = intersect_outline(mid_outline, mb_curve_dist1, side)[0]
     mtpj5_mb_dist1 = intersect_outline(mid_outline, mb_curve_dist1, side)[1]
-    rs.DeleteObject(mb_curve_dist1)
     
     ### mtpj1 dist1 and mtpj5 dist2
     mb_curve_dist2 = rs.CopyObject(mb_curve, [0, 12, 0])
     mtpj1_mb_dist2 = intersect_outline(mid_outline, mb_curve_dist2, side)[0]
     mtpj5_mb_dist2 = intersect_outline(mid_outline, mb_curve_dist2, side)[1]
-    rs.DeleteObject(mb_curve_dist2)
     
     ## layer housekeeping
     rs.LayerVisible("Pressure curve", False)
@@ -336,6 +355,10 @@ def DI_BUILD():
         toe = [toe_pt_x[size + 1], toe_pt_y[size + 1], -3]
         toe_med = [toe_med_x[size + 1], toe_med_y[size + 1], -3]
         toe_lat = [toe_lat_x[size + 1], toe_lat_y[size + 1], -3]
+        toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] + 10, toe[1] -10, 0], [toe[0] + 10, toe[1] + 10, 0]))[0][1]
+        toe_med1[2] = -3
+        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] - 10, toe[1] -10, 0], [toe[0] - 10, toe[1] + 10, 0]))[0][1]
+        toe_lat1[2] = -3
         ff_med = [ff_med_x[size + 1], ff_med_y[size + 1], -3]
         ff_lat = [ff_lat_x[size + 1], ff_lat_y[size + 1], -3]
         ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -3]
@@ -343,6 +366,10 @@ def DI_BUILD():
         toe = [toe_pt_x[size + 1] * - 1, toe_pt_y[size + 1], -3]
         toe_med = [toe_med_x[size + 1] * -1, toe_med_y[size + 1], -3]
         toe_lat = [toe_lat_x[size + 1] * -1, toe_lat_y[size + 1], -3]
+        toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] - 10, toe[1] -10, 0], [toe[0] - 10, toe[1] + 10, 0]))[0][1]
+        toe_med1[2] = -3
+        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] + 10, toe[1] -10, 0], [toe[0] + 10, toe[1] + 10, 0]))[0][1]
+        toe_lat1[2] = -3
         ff_med = [ff_med_x[size + 1] * -1, ff_med_y[size + 1], -3]
         ff_lat = [ff_lat_x[size + 1] * -1, ff_lat_y[size + 1], -3]
         ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 15, -3]
@@ -376,10 +403,10 @@ def DI_BUILD():
     ### construct medial curve
     medial_curve = make_curve([heel_center, heel_center_medial, heel_medial, 
                                arch_medial, mtpj1_prox, mtpj1, mtpj1_dist1, 
-                               mtpj1_dist2, ff_med, toe_med, toe])
+                               mtpj1_dist2, ff_med, toe_med, toe_med1, toe])
     
     ### construct lateral curve
-    lateral_curve = make_curve([toe, toe_lat, ff_lat, mtpj5_dist2, mtpj5_dist1, 
+    lateral_curve = make_curve([toe, toe_lat1, toe_lat, ff_lat, mtpj5_dist2, mtpj5_dist1, 
                                 mtpj5, mtpj5_prox, arch_lateral, heel_lateral, 
                                 heel_center_lateral, heel_center])
     
@@ -407,57 +434,11 @@ def DI_BUILD():
                                    heel_lateral])
     
     ### make top surface
-    top = rs.AddNetworkSrf([medial_curve, lateral_curve, arch_curve,
-                            forefoot_curve1, forefoot_curve2, forefoot_curve3, 
-                            forefoot_curve4, forefoot_curve5, 
-                            cross_curve_heel, central_curve])
-    #rs.RebuildSurface(top, pointcount = (50, 10))
-    
-    
-    # =========================================================================
-    
-    # rebuild mid outline
-    mtpj1_prox_mo = lm_inter(mid_outline, mtpj1_prox[1], dir1)
-    mtpj1_prox_mo[0] = mtpj1_prox_mo[0] * -1  
-    mtpj1_mo = lm_inter(mid_outline, mtpj1[1] + 5, dir1)
-    mtpj1_mo[0] = mtpj1_mo[0] * -1
-    mtpj1_dist1_mo = lm_inter(mid_outline, mtpj1_dist1[1] + 10, dir1)
-    mtpj1_dist1_mo[0] = mtpj1_dist1_mo[0] * -1 
-    mtpj1_dist2_mo = lm_inter(mid_outline, mtpj1_dist2[1] + 15, dir1)
-    mtpj1_dist2_mo[0] = mtpj1_dist2_mo[0] * -1
-    ff_med_prox_mo = lm_inter(mid_outline, ff_med_mo[1] - 10, dir1)
-    ff_med_prox_mo[0] = ff_med_prox_mo[0] * -1
-    ff_med_dist_mo = lm_inter(mid_outline, ff_med_mo[1] + 5, dir1)
-    ff_med_dist_mo[0] = ff_med_dist_mo[0] * -1
-    mtpj5_prox_mo = lm_inter(mid_outline, mtpj5_prox[1] - 15, dir2)
-    mtpj5_prox_mo[0] = mtpj5_prox_mo[0] * -1  
-    mtpj5_mo = lm_inter(mid_outline, mtpj5[1] - 15, dir2)
-    mtpj5_mo[0] = mtpj5_mo[0] * -1
-    mtpj5_dist1_mo = lm_inter(mid_outline, mtpj5_dist1[1] - 10, dir2)
-    mtpj5_dist1_mo[0] = mtpj5_dist1_mo[0] * -1 
-    mtpj5_dist2_mo = lm_inter(mid_outline, mtpj5_dist2[1] - 10, dir2)
-    mtpj5_dist2_mo[0] = mtpj5_dist2_mo[0] * -1
-    ff_lat_prox_mo = lm_inter(mid_outline, ff_lat_mo[1] - 25, dir2)
-    ff_lat_prox_mo[0] = ff_lat_prox_mo[0] * -1
-    ff_lat_dist_mo = lm_inter(mid_outline, ff_lat_mo[1] + 5, dir2)
-    ff_lat_dist_mo[0] = ff_lat_dist_mo[0] * -1
-    
-    mid_outline = make_curve([heel_center_mo, heel_center_medial_mo,
-                              heel_medial_mo, arch_medial_mo, mtpj1_prox_mo, 
-                              mtpj1_mo, mtpj1_dist1_mo, mtpj1_dist2_mo, 
-                              ff_med_prox_mo, ff_med_mo, ff_med_dist_mo, toe_med_mo, toe_mo, toe_lat_mo,
-                              ff_lat_dist_mo, ff_lat_mo, ff_lat_prox_mo, mtpj5_dist2_mo, mtpj5_dist1_mo, 
-                              mtpj5_mo, mtpj5_prox_mo, arch_lateral_mo, 
-                              heel_lateral_mo, heel_center_lateral_mo, 
-                              heel_center_mo])
-    
-    if side == "RIGHT":
-        plane = rs.WorldYZPlane()
-        xform = rs.XformMirror(plane.Origin, plane.Normal)
-        mid_outline = rs.TransformObject(mid_outline, xform, False)
-        x = rs.TransformObject(x, xform, False)
-    
-    #rs.RebuildCurve(mid_outline, point_count = 500)
+    top = rs.AddNetworkSrf([medial_curve, lateral_curve, central_curve, 
+                            arch_curve, forefoot_curve1, forefoot_curve2, 
+                            forefoot_curve3, forefoot_curve4, forefoot_curve5, 
+                            cross_curve_heel])
+    rs.RebuildSurface(top, pointcount = (100, 12))
     
     
     # =========================================================================
@@ -470,23 +451,34 @@ def DI_BUILD():
     # =========================================================================
     
     # Assemble Insole
-    ## smooth bottom edge
+    ## round bottom edge
+    rs.RebuildCurve(mid_outline, point_count = 100)
     mid_outline = rs.MoveObject(mid_outline, [0, 0, -6])
     arc = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
                        [heel_center[0], heel_center_pt_y[size], -10], 
-                       [0, heel_center_mo[1] + 1.5, -8])
+                       [0, heel_center_mo[1] + 1.6, -7.9])
+    rs.RebuildCurve(arc)
     bottom_corner = rs.AddSweep2([bottom_outline, mid_outline], [arc])
     
     ## create surface joining top and bottom
     top_edge = rs.DuplicateSurfaceBorder(top)
-    shape = rs.AddLine(heel_center, [heel_center_mo[0], heel_center_mo[1], heel_center_mo[2] - 6])
-    side_surf = rs.AddSweep2([top_edge, mid_outline], [shape])
+    shape1 = rs.AddLine(heel_center, [heel_center_mo[0], heel_center_mo[1], heel_center_mo[2] - 6])
+    mtpj1_fix_mo = lm_plane_inter(mid_outline, mtpj1[1] + 20, side, "med")
+    mtpj1_fix_top = lm_plane_inter(top_edge, mtpj1[1] + 20, side, "med")
+    shape2 = rs.AddLine(mtpj1_fix_top, mtpj1_fix_mo)
+    mtpj5_fix_mo = lm_plane_inter(mid_outline, mtpj5[1] + 20, side, "lat")
+    mtpj5_fix_top = lm_plane_inter(top_edge, mtpj5[1] + 20, side, "lat")
+    shape3 = rs.AddLine(mtpj5_fix_top, mtpj5_fix_mo)
+    side_surf1 = rs.AddSweep2([mid_outline, top_edge], [shape1, shape2])
+    side_surf2 = rs.AddSweep2([mid_outline, top_edge], [shape2, shape3])
+    side_surf3 = rs.AddSweep2([mid_outline, top_edge], [shape3, shape1])
     
     ## join all surfaces to maek solid
-    FO = rs.JoinSurfaces([side_surf, bottom, bottom_corner, top], delete_input = True)
+    FO = rs.JoinSurfaces([side_surf1, side_surf2, side_surf3, bottom, 
+                          bottom_corner, top], delete_input = True)
     
     ## delete curves
-    rs.DeleteObjects(rs.ObjectsByType(4))
+    rs.DeleteObjects(rs.ObjectsByType(1 | 4))
     
     ## tidy up layers
     rs.LayerVisible("Heel Medial", False)
