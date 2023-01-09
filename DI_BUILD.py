@@ -88,9 +88,9 @@ def DI_BUILD():
                                         [-100, point, 10]])
         plane = rs.AddPlanarSrf(plane_crv)
         intersect_pt = rs.CurveBrepIntersect(curve, plane)[1]
-        intersect_pt = rs.PointCoordinates(intersect_pt)
-        rs.DeleteObjects([plane_crv, plane])
-        return intersect_pt
+        intersect_coords = rs.PointCoordinates(intersect_pt)
+        rs.DeleteObjects([plane_crv, plane, intersect_pt])
+        return intersect_coords
     
     
     # =========================================================================
@@ -250,12 +250,25 @@ def DI_BUILD():
                               heel_lateral_mo, heel_center_lateral_mo, 
                               heel_center_mo])
     
+    ### mid outline 2
+    mid_outline2 = make_curve([heel_center_mo, heel_center_medial_mo, 
+                               heel_medial_mo, 
+                               [arch_medial_mo[0], arch_medial_mo[1], 5], 
+                               [mtpj1_prox_mo[0], mtpj1_prox_mo[1], 1],
+                               mtpj1_mo, mtpj1_dist1_mo, mtpj1_dist2_mo, 
+                               ff_med_mo, toe_med_mo, toe_mo, toe_lat_mo,
+                               ff_lat_mo, mtpj5_dist2_mo, mtpj5_dist1_mo, 
+                               mtpj5_mo, mtpj5_prox_mo, arch_lateral_mo, 
+                               heel_lateral_mo, heel_center_lateral_mo, 
+                               heel_center_mo])
+    
     ### mirror if necessary
     if side == "RIGHT":
         plane = rs.WorldYZPlane()
         xform = rs.XformMirror(plane.Origin, plane.Normal)
         bottom_outline = rs.TransformObject(bottom_outline, xform, False)
         mid_outline = rs.TransformObject(mid_outline, xform, False)
+        mid_outline2 = rs.TransformObject(mid_outline2, xform, False)
     
     
     # =========================================================================
@@ -452,33 +465,43 @@ def DI_BUILD():
     
     # Assemble Insole
     ## round bottom edge
-    rs.RebuildCurve(mid_outline, point_count = 100)
-    mid_outline = rs.MoveObject(mid_outline, [0, 0, -6])
-    arc = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
-                       [heel_center[0], heel_center_pt_y[size], -10], 
-                       [0, heel_center_mo[1] + 1.6, -7.9])
-    rs.RebuildCurve(arc)
-    bottom_corner = rs.AddSweep2([bottom_outline, mid_outline], [arc])
+    rs.RebuildCurve(mid_outline2, point_count = 100)
+    mid_outline2 = rs.MoveObject(mid_outline2, [0, 0, -6])
+    arc1 = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
+                        [heel_center[0], heel_center_pt_y[size], -10], 
+                        [0, heel_center_mo[1] + 1.6, -7.9])
+    rs.RebuildCurve(arc1)
+    mtpj1_arc_mo = lm_plane_inter(mid_outline2, mtpj1[1], side, "med")
+    mtpj1_arc_bo = lm_plane_inter(bottom_outline, mtpj1[1], side, "med")
+    if side == "LEFT":
+        arc2 = rs.AddArc3Pt(mtpj1_arc_mo, mtpj1_arc_bo,
+                            [mtpj1_arc_bo[0] + 3, mtpj1_arc_bo[1], mtpj1_arc_bo[2] + 0.1])
+    else:
+        arc2 = rs.AddArc3Pt(mtpj1_arc_mo, mtpj1_arc_bo,
+                            [mtpj1_arc_mo[0], mtpj1_arc_mo[1], mtpj1_arc_mo[2]])
+    bottom_corner1 = rs.AddSweep2([bottom_outline, mid_outline2], [arc1, arc2])
+    bottom_corner2 = rs.AddSweep2([bottom_outline, mid_outline2], [arc2, arc1])
     
     ## create surface joining top and bottom
     top_edge = rs.DuplicateSurfaceBorder(top)
     shape1 = rs.AddLine(heel_center, [heel_center_mo[0], heel_center_mo[1], heel_center_mo[2] - 6])
-    mtpj1_fix_mo = lm_plane_inter(mid_outline, mtpj1[1] + 20, side, "med")
+    mtpj1_fix_mo = lm_plane_inter(mid_outline2, mtpj1[1] + 20, side, "med")
     mtpj1_fix_top = lm_plane_inter(top_edge, mtpj1[1] + 20, side, "med")
     shape2 = rs.AddLine(mtpj1_fix_top, mtpj1_fix_mo)
-    mtpj5_fix_mo = lm_plane_inter(mid_outline, mtpj5[1] + 20, side, "lat")
+    mtpj5_fix_mo = lm_plane_inter(mid_outline2, mtpj5[1] + 20, side, "lat")
     mtpj5_fix_top = lm_plane_inter(top_edge, mtpj5[1] + 20, side, "lat")
     shape3 = rs.AddLine(mtpj5_fix_top, mtpj5_fix_mo)
-    side_surf1 = rs.AddSweep2([mid_outline, top_edge], [shape1, shape2])
-    side_surf2 = rs.AddSweep2([mid_outline, top_edge], [shape2, shape3])
-    side_surf3 = rs.AddSweep2([mid_outline, top_edge], [shape3, shape1])
+    side_surf1 = rs.AddSweep2([mid_outline2, top_edge], [shape1, shape2])
+    side_surf2 = rs.AddSweep2([mid_outline2, top_edge], [shape2, shape3])
+    side_surf3 = rs.AddSweep2([mid_outline2, top_edge], [shape3, shape1])
     
-    ## join all surfaces to maek solid
+    ## join all surfaces to make solid
     FO = rs.JoinSurfaces([side_surf1, side_surf2, side_surf3, bottom, 
-                          bottom_corner, top], delete_input = True)
+                          bottom_corner1, bottom_corner2, top], 
+                          delete_input = True)
     
     ## delete curves
-    rs.DeleteObjects(rs.ObjectsByType(1 | 4))
+    rs.DeleteObjects(rs.ObjectsByType(4))
     
     ## tidy up layers
     rs.LayerVisible("Heel Medial", False)

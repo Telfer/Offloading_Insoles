@@ -179,7 +179,7 @@ def FE_parts():
     MTHsr_4 = float(data[31])
     MTHsr_5 = float(data[33])
     
-    ## MTr_x - Metatarsal shaft radius, calculated as 80% of metatarsal head radius
+    ## MTr_x - Metatarsal shaft radius, calculated as 80% of met head radius
     MTr_2 = MTHw_2 * 0.4
     MTr_3 = MTHw_3 * 0.4
     MTr_4 = MTHw_4 * 0.4
@@ -283,6 +283,7 @@ def FE_parts():
     ## Union
     MTH1 = rs.BooleanUnion([MTH1, L_ses, M_ses])
     MTH1_ = rs.CopyObject(MTH1)
+    
     
     # =========================================================================
     
