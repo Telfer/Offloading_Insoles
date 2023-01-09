@@ -131,6 +131,16 @@ def FE_parts():
         cut_scan = rs.LastCreatedObjects()
         return(cut_scan)
     
+    def moveLive(message):
+        while True:
+            arrObject = rs.GetObjectEx(message,0,False,True)
+            if arrObject is None: break
+            idObject = arrObject[0]
+            arrP = arrObject[3]
+            rs.Command("_Move " + str(arrP) + " _Pause _EnterEnd", False)
+            if rs.LastCommandResult() != 0:
+                break
+        return
     
     
     # =========================================================================
@@ -280,6 +290,13 @@ def FE_parts():
     L_ses = rs.MoveObject(L_ses, [MLD_LS, MAP_LS * -1, PTT_LS + MTHw_LS / 2])
     M_ses = rs.MoveObject(M_ses, [MLD_MS, MAP_MS * -1, PTT_MS + MTHw_MS / 2])
     
+    ## trim top of sesamoids
+    cyl = rs.AddCylinder(rs.WorldXYPlane(), 30,100)
+    cyl = rs.MoveObject(cyl, [0, 0, PTT_1 + (MTHw_1 / 2)])
+    cyl2 = rs.CopyObject(cyl)
+    L_ses = rs.BooleanDifference(L_ses, cyl)
+    M_ses = rs.BooleanDifference(M_ses, cyl2)
+    
     ## Union
     MTH1 = rs.BooleanUnion([MTH1, L_ses, M_ses])
     MTH1_ = rs.CopyObject(MTH1)
@@ -290,13 +307,21 @@ def FE_parts():
     # copy scan and insole
     scan = rs.ObjectsByLayer("Position scan")[0]
     scanFE = rs.ObjectLayer(rs.CopyObject(scan), "FE Tissue")
-    scanFE = rs.ObjectsByLayer("FE Tissue")[0]
-    MTH3_pt = rs.GetPoint(message = "Select MTH3 point on scan")
-    scanFE = rs.MoveObject(scanFE, [MTH3_pt[0] * -1, MTH3_pt[1] * -1, 0])
     insole = rs.ObjectsByLayer("FO Build")[0]
     insole_FE = rs.ObjectLayer(rs.CopyObject(insole), "FE Insole")
+    scanFE = rs.ObjectsByLayer("FE Tissue")[0]
     insole_FE = rs.ObjectsByLayer("FE Insole")[0]
-    insole_FE = rs.MoveObject(insole_FE, [MTH3_pt[0] * -1, MTH3_pt[1] * -1, 0])
+    
+    pt = rs.GetPoint()
+    scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt)
+    
+    x = rs.MessageBox("Scan position correct?", 3)
+    
+    while x == 7:
+        #scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt * -1)
+        pt = rs.GetPoint()
+        scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt)
+        x = rs.MessageBox("Scan position correct?", 3)
     
     
     # =========================================================================
@@ -418,22 +443,22 @@ def FE_parts():
     
     # export parts
     ## make folder
-    directory = rs.BrowseForFolder(message = "Select folder to save FE parts")
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    #directory = rs.BrowseForFolder(message = "Select folder to save FE parts")
+    #if not os.path.exists(directory):
+    #    os.makedirs(directory)
     
     ## export mets
-    export_stl(directory, MTH1_, "Met1_FE")
-    export_stl(directory, MTH2_, "Met2_FE")
-    export_stl(directory, MTH3_, "Met3_FE")
-    export_stl(directory, MTH4_, "Met4_FE")
-    export_stl(directory, MTH5_, "Met5_FE")
+    #export_stl(directory, MTH1_, "Met1_FE")
+    #export_stl(directory, MTH2_, "Met2_FE")
+    #export_stl(directory, MTH3_, "Met3_FE")
+    #export_stl(directory, MTH4_, "Met4_FE")
+    #export_stl(directory, MTH5_, "Met5_FE")
     
     ## export soft tissue parts
-    export_stl(directory, soft_tissue_FE, "SoftTissue_FE")
-    export_stl(directory, tiss, "SoftTissue_MT2_FE")
+    #export_stl(directory, soft_tissue_FE, "SoftTissue_FE")
+    #export_stl(directory, tiss, "SoftTissue_MT2_FE")
     
     ## export insole
-    export_stl(directory, insole_FE, "Insole_FE")
+    #export_stl(directory, insole_FE, "Insole_FE")
 
 FE_parts()
