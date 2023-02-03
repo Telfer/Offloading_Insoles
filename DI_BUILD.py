@@ -477,8 +477,10 @@ def DI_BUILD():
         arc2 = rs.AddArc3Pt(mtpj1_arc_mo, mtpj1_arc_bo,
                             [mtpj1_arc_bo[0] + 3, mtpj1_arc_bo[1], mtpj1_arc_bo[2] + 0.1])
     else:
+        #arc2 = rs.AddArc3Pt(mtpj1_arc_mo, mtpj1_arc_bo,
+        #                    [mtpj1_arc_mo[0], mtpj1_arc_mo[1], mtpj1_arc_mo[2]])
         arc2 = rs.AddArc3Pt(mtpj1_arc_mo, mtpj1_arc_bo,
-                            [mtpj1_arc_mo[0], mtpj1_arc_mo[1], mtpj1_arc_mo[2]])
+                            [mtpj1_arc_bo[0] - 3, mtpj1_arc_bo[1], mtpj1_arc_bo[2] + 0.1])
     bottom_corner1 = rs.AddSweep2([bottom_outline, mid_outline2], [arc1, arc2])
     bottom_corner2 = rs.AddSweep2([bottom_outline, mid_outline2], [arc2, arc1])
     
