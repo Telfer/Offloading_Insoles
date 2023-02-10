@@ -453,6 +453,9 @@ def DI_BUILD():
                             cross_curve_heel])
     rs.RebuildSurface(top, pointcount = (100, 12))
     
+    ### add top skin
+    top_skin = rs.ExtrudeSurface(top, rs.AddLine([0, 0, 0], [0, 0, 0.2]))
+    
     
     # =========================================================================
     
