@@ -142,6 +142,19 @@ def FE_parts():
                 break
         return
     
+    def pointFromMeshCurveInt(lm, scan):
+        # define vline
+        vline = rs.AddLine([lm[0], lm[1], 0], [lm[0], lm[1], 40])
+        
+        # find mesh intersect point
+        if (rs.CurveMeshIntersection(vline, scan)):
+            int_point = rs.CurveMeshIntersection(vline, scan)[0]
+        else:
+            int_point = [point[0], point[1], lm[1][2]]
+        
+        rs.DeleteObject(vline)
+        return int_point
+    
     
     # =========================================================================
     
@@ -297,10 +310,6 @@ def FE_parts():
     L_ses = rs.BooleanDifference(L_ses, cyl)
     M_ses = rs.BooleanDifference(M_ses, cyl2)
     
-    ## Union
-    MTH1 = rs.BooleanUnion([MTH1, L_ses, M_ses])
-    MTH1_ = rs.CopyObject(MTH1)
-    
     
     # =========================================================================
     
@@ -312,16 +321,44 @@ def FE_parts():
     scanFE = rs.ObjectsByLayer("FE Tissue")[0]
     insole_FE = rs.ObjectsByLayer("FE Insole")[0]
     
-    pt = rs.GetPoint()
-    scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt)
     
+    # =========================================================================
+    
+    # position tissue against mets
+    pt = rs.GetPoint("Select MT3 point")
+    scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt * -1)
     x = rs.MessageBox("Scan position correct?", 3)
     
     while x == 7:
-        #scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt * -1)
         pt = rs.GetPoint()
-        scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt)
+        scanFE, insole_FE = rs.MoveObjects([scanFE, insole_FE], pt * -1)
         x = rs.MessageBox("Scan position correct?", 3)
+    
+    
+    # =========================================================================
+    
+    # adjust met height
+    ## get points on tissue
+    LS_adj = pointFromMeshCurveInt([MLD_LS, MAP_LS, 0], scanFE)
+    MS_adj = pointFromMeshCurveInt([MLD_MS, MAP_MS, 0], scanFE)
+    MT1_adj = pointFromMeshCurveInt([MLD_1, MAP_1, 0], scanFE)
+    MT2_adj = pointFromMeshCurveInt([MLD_2, MAP_2, 0], scanFE)
+    MT3_adj = pointFromMeshCurveInt([0, 0, 0], scanFE)
+    MT4_adj = pointFromMeshCurveInt([MLD_4, MAP_4, 0], scanFE)
+    MT5_adj = pointFromMeshCurveInt([MLD_5, MAP_5, 0], scanFE)
+    
+    ## move mets/sesamoids
+    MTH1 = rs.MoveObject(MTH1, [0, 0, MT1_adj[2]])
+    MTH2 = rs.MoveObject(MTH2, [0, 0, MT2_adj[2]])
+    MTH3 = rs.MoveObject(MTH3, [0, 0, MT3_adj[2]])
+    MTH4 = rs.MoveObject(MTH4, [0, 0, MT4_adj[2]])
+    MTH5 = rs.MoveObject(MTH5, [0, 0, MT5_adj[2]])
+    L_ses = rs.MoveObject(L_ses, [0, 0, LS_adj[2]]) 
+    M_ses = rs.MoveObject(M_ses, [0, 0, MS_adj[2]]) 
+    
+    ## Make Met 1
+    MTH1 = rs.BooleanUnion([MTH1, L_ses, M_ses])
+    MTH1_ = rs.CopyObject(MTH1)
     
     
     # =========================================================================
@@ -338,25 +375,25 @@ def FE_parts():
     MT5_prox_ml = math.sin(math.radians(MTca_5)) * MTl_5 + MLD_5
     
     curve_MT1 = rs.AddInterpCurve([[MLD_1, 100, PTT_1 + MTHw_1 * 0.5],
-                                [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5],
-                                [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h], 
-                                [MT1_prox_ml, -300, MT1_prox_h]])
+                                   [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5],
+                                   [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h], 
+                                   [MT1_prox_ml, -300, MT1_prox_h]])
     curve_MT2 = rs.AddInterpCurve([[MLD_2, 100, PTT_2 + MTHsr_2],
-                                [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2],
-                                [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
-                                [MLD_2, -300, MT2_prox_h]])
+                                   [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2],
+                                   [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
+                                   [MLD_2, -300, MT2_prox_h]])
     curve_MT3 = rs.AddInterpCurve([[0, 100, PTT_3 + MTHsr_3],
-                                [0, 0, PTT_3 + MTHsr_3],
-                                [0, MTl_3 * -1, MT3_prox_h],
-                                [0, -300, MT3_prox_h]])
+                                   [0, 0, PTT_3 + MTHsr_3],
+                                   [0, MTl_3 * -1, MT3_prox_h],
+                                   [0, -300, MT3_prox_h]])
     curve_MT4 = rs.AddInterpCurve([[MLD_4, 100, PTT_4 + MTHsr_4],
-                                [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4],
-                                [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
-                                [MT4_prox_ml, -300, MT4_prox_h]])
+                                   [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4],
+                                   [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
+                                   [MT4_prox_ml, -300, MT4_prox_h]])
     curve_MT5 = rs.AddInterpCurve([[MLD_5, 100, PTT_5 + MTHsr_5],
-                                [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5],
-                                [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h],
-                                [MT5_prox_ml, -300, MT5_prox_h]])
+                                   [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5],
+                                   [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h],
+                                   [MT5_prox_ml, -300, MT5_prox_h]])
     
     if side == "RIGHT":
         curve_lat = rs.CopyObject(curve_MT5, [50, 0, 0])
@@ -378,28 +415,28 @@ def FE_parts():
     
     ## Distal cut
     distal_curve = rs.AddInterpCurve([[MLD_1_ofs, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
-                                   [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
-                                   [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2], 
-                                   [0, 0, PTT_3 + MTHsr_3], 
-                                   [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4], 
-                                   [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5], 
-                                   [MLD_5_ofs, MAP_5 * -1, PTT_5 + MTHsr_5]])
-    distal_curve = rs.MoveObject(distal_curve, [0, MAP_2 + MTHsr_2 + 8, -50])
+                                      [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
+                                      [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2], 
+                                      [0, 0, PTT_3 + MTHsr_3], 
+                                      [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4], 
+                                      [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5], 
+                                      [MLD_5_ofs, MAP_5 * -1, PTT_5 + MTHsr_5]])
+    distal_curve = rs.MoveObject(distal_curve, [0, MAP_2 + MTHsr_2 + 10, -50])
     distal_surface = rs.ExtrudeCurveStraight(distal_curve, 
                                              [0, 0, -50], [0, 0, 100])
     rs.DeleteObject(distal_curve)
     
     ## Proximal cut
     proximal_curve = rs.AddInterpCurve([[MLD_1_ofs_prox, MTl_1 * -1 - MAP_1, MT1_prox_h], 
-                                     [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h],
-                                     [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
-                                     [0, MTl_3 * -1, MT3_prox_h], 
-                                     [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
-                                     [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h], 
-                                     [MLD_5_ofs_prox, MTl_5 * -1 - MAP_5, MT5_prox_h]])
-    proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -50])
+                                        [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h],
+                                        [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
+                                        [0, MTl_3 * -1, MT3_prox_h], 
+                                        [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
+                                        [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h], 
+                                        [MLD_5_ofs_prox, MTl_5 * -1 - MAP_5, MT5_prox_h]])
+    proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -100])
     proximal_surface = rs.ExtrudeCurveStraight(proximal_curve, 
-                                               [0, 0, -50], [0, 0, 100])
+                                               [0, 0, -100], [0, 0, 100])
     rs.DeleteObjects([proximal_curve, distal_curve, curve_lat, curve_med,
                       curve_MT1, curve_MT2, curve_MT3, curve_MT4, curve_MT5])
     
@@ -426,7 +463,7 @@ def FE_parts():
     soft_tissue_FE2 = rs.ObjectsByLayer("FE MT2 Tissue")[0]
     
     ### make 2 cutting planes
-    rect = rs.AddRectangle(rs.WorldYZPlane(), 100, 100)
+    rect = rs.AddRectangle(rs.WorldYZPlane(), 200, 200)
     pln = rs.AddPlanarSrf(rect)
     pln = rs.MoveObject(pln, [0, -80, 0])
     rs.DeleteObject(rect)
@@ -437,6 +474,7 @@ def FE_parts():
     ### met 2 soft tissue
     tiss = meshBoolSplit(soft_tissue_FE2, pln, "med")
     tiss = meshBoolSplit(tiss, pln2, "lat")
+    rs.DeleteObjects([pln, pln2])
     
     
     # =========================================================================
