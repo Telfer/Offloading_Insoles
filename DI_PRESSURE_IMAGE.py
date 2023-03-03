@@ -10,6 +10,7 @@ def PRESSURE_IMAGE ():
     objs = rs.ObjectsByLayer("Pressure Image")
     rs.DeleteObjects(objs)
     
+    
     # =========================================================================
     
     # make sure top view is maximized
@@ -27,9 +28,8 @@ def PRESSURE_IMAGE ():
     filename = rs.OpenFileName()
     
     # picture loaded
-    picture = rs.AddPictureFrame(rs.WorldXYPlane(), filename, width=1280, 
-                                 height=800, self_illumination=True, 
-                                 embed=False, use_alpha=False, make_mesh=False)
+    picture = rs.AddPictureFrame(rs.WorldXYPlane(), filename, embed=False, 
+                                 use_alpha=False, make_mesh=False)
     
     # zoom extents
     rs.ZoomExtents("Top")
@@ -52,14 +52,14 @@ def PRESSURE_IMAGE ():
     
     # scale pressure
     ## measured distances
-    scan_dist = rs.Distance(hal_scan, heel_scan)
-    press_dist = rs.Distance(hal_scan, heel_press)
+    #scan_dist = rs.Distance(hal_scan, heel_scan)
+    #press_dist = rs.Distance(hal_scan, heel_press)
     
     ## ratio
-    ratio = scan_dist / press_dist
+    #ratio = scan_dist / press_dist
     
     ## scale
-    picture = rs.ScaleObject(picture, hal_scan, [ratio, ratio, ratio])
+    #picture = rs.ScaleObject(picture, hal_scan, [ratio, ratio, ratio])
     
     ## align pressure
     scan_axis = rs.VectorCreate(hal_scan, heel_scan)
