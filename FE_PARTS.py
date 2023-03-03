@@ -16,6 +16,7 @@ import scriptcontext as sc
 rs.AddLayer("FE Bones")
 rs.AddLayer("FE Tissue")
 rs.AddLayer("FE Insole")
+rs.AddLayer("FE MT2")
 rs.AddLayer("FE MT2 Tissue")
 
 
@@ -457,46 +458,65 @@ def FE_parts():
     soft_tissue_FE2 = rs.CopyObject(soft_tissue_FE)
     rs.HideObject(dorsal_surface)
     
-    ## met 2 soft tissue part
+    
+    # =========================================================================
+    
+    # Parts for inverse FE tissue
+    ## bone
+    rs.CurrentLayer("FE MT2")
+    MTH2_i = build_met(MTHsr_2, MTHw_2, MTsa_2, 0, 1)
+    MTH2_i = rs.MoveObject(MTH2_i, [0, 0, MTHsr_2 + PTT_2])
+    
+    ## tissue
     rs.CurrentLayer("FE MT2 Tissue")
-    rs.ObjectLayer(soft_tissue_FE2, "FE MT2 Tissue")
-    soft_tissue_FE2 = rs.ObjectsByLayer("FE MT2 Tissue")[0]
+    points = [[-2.5, 15, 0], [-2.5, -15, 0], [2.5, -15, 0], [2.5, 15, 0],
+              [-2.5, 15, MTHsr_2 + PTT_2], [-2.5, -15, MTHsr_2 + PTT_2], 
+              [2.5, -15, MTHsr_2 + PTT_2], [2.5, 15, MTHsr_2 + PTT_2]]
+    MTH2_tissue = rs.AddBox(points)
     
-    ### make 2 cutting planes
-    rect = rs.AddRectangle(rs.WorldYZPlane(), 200, 200)
-    pln = rs.AddPlanarSrf(rect)
-    pln = rs.MoveObject(pln, [0, -80, 0])
-    rs.DeleteObject(rect)
-    pln = rs.RotateObject(pln, [0, 0, 0], MTca_1/2, [0, 0, 1])
-    pln = rs.MoveObject(pln, [MLD_2 + ((MTHw_2 / 2) + 1), 0, 0])
-    pln2 = rs.CopyObject(pln, [(MTHw_2 * -1) -2, 0, 0])
+    ## boolean
+    MTH2_tis = rs.BooleanDifference(MTH2_tissue, MTH2_i, delete_input = False)
+    rs.DeleteObject(MTH2_tissue)
     
-    ### met 2 soft tissue
-    tiss = meshBoolSplit(soft_tissue_FE2, pln, "med")
-    tiss = meshBoolSplit(tiss, pln2, "lat")
-    rs.DeleteObjects([pln, pln2])
+    
+    # =========================================================================
+    
+    # adjust position of soft tissue so just above insole
+    mmi = False
+    while (mmi == False):
+        results = rs.MeshMeshIntersection(soft_tissue_FE, insole_FE)
+        if results:
+            mmi = False
+            soft_tissue_FE = rs.MoveObject(soft_tissue_FE, [0, 0, 0.1])
+            MTH1_, MTH2_, MTH3_, MTH4_, MTH5_ = rs.MoveObjects([MTH1_, MTH2_, 
+                                                                MTH3_, MTH4_, 
+                                                                MTH5_],
+                                                                [0, 0, 0.1])
+        else:
+            mmi = True
     
     
     # =========================================================================
     
     # export parts
     ## make folder
-    #directory = rs.BrowseForFolder(message = "Select folder to save FE parts")
-    #if not os.path.exists(directory):
-    #    os.makedirs(directory)
+    directory = rs.BrowseForFolder(message = "Select folder to save FE parts")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     
     ## export mets
-    #export_stl(directory, MTH1_, "Met1_FE")
-    #export_stl(directory, MTH2_, "Met2_FE")
-    #export_stl(directory, MTH3_, "Met3_FE")
-    #export_stl(directory, MTH4_, "Met4_FE")
-    #export_stl(directory, MTH5_, "Met5_FE")
+    export_stl(directory, MTH1_, "Met1_FE")
+    export_stl(directory, MTH2_, "Met2_FE")
+    export_stl(directory, MTH2_i, "Met2_Inv_FE")
+    export_stl(directory, MTH3_, "Met3_FE")
+    export_stl(directory, MTH4_, "Met4_FE")
+    export_stl(directory, MTH5_, "Met5_FE")
     
     ## export soft tissue parts
-    #export_stl(directory, soft_tissue_FE, "SoftTissue_FE")
-    #export_stl(directory, tiss, "SoftTissue_MT2_FE")
+    export_stl(directory, soft_tissue_FE, "SoftTissue_FE")
+    export_stl(directory, MTH2_tis, "SoftTissue_MT2_FE")
     
     ## export insole
-    #export_stl(directory, insole_FE, "Insole_FE")
+    export_stl(directory, insole_FE, "Insole_FE")
 
 FE_parts()
