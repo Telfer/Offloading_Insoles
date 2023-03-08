@@ -185,6 +185,7 @@ def FE_parts():
     PTT_LS = float(data[3])
     PTT_MS = float(data[5])
     PTT_2 = float(data[7])
+    print(PTT_2)
     PTT_3 = float(data[9])
     PTT_4 = float(data[11])
     PTT_5 = float(data[13])
@@ -288,6 +289,7 @@ def FE_parts():
     ## position MT parts
     MTH1 = rs.MoveObject(MTH1, [MLD_1, MAP_1 * -1, PTT_1 + (MTHw_1 * 0.5)])
     MTH2 = rs.MoveObject(MTH2, [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2])
+    MTH2_IFE = rs.CopyObject(MTH2)
     MTH3 = rs.MoveObject(MTH3, [0, 0, PTT_3 + MTHsr_3])
     MTH4 = rs.MoveObject(MTH4, [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4])
     MTH5 = rs.MoveObject(MTH5, [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5])
@@ -468,21 +470,21 @@ def FE_parts():
     # =========================================================================
     
     # Parts for inverse FE tissue
-#    ## bone
-#    rs.CurrentLayer("FE MT2")
-#    MTH2_i = build_met(MTHsr_2, MTHw_2, MTsa_2, 0, 1)
-#    MTH2_i = rs.MoveObject(MTH2_i, [0, 0, MTHsr_2 + PTT_2])
-#    
-#    ## tissue
-#    rs.CurrentLayer("FE MT2 Tissue")
-#    points = [[-2.5, 15, 0], [-2.5, -15, 0], [2.5, -15, 0], [2.5, 15, 0],
-#              [-2.5, 15, MTHsr_2 + PTT_2], [-2.5, -15, MTHsr_2 + PTT_2], 
-#              [2.5, -15, MTHsr_2 + PTT_2], [2.5, 15, MTHsr_2 + PTT_2]]
-#    MTH2_tissue = rs.AddBox(points)
-#    
-#    ## boolean
-#    MTH2_tis = rs.BooleanDifference(MTH2_tissue, MTH2_i, delete_input = False)
-#    rs.DeleteObject(MTH2_tissue)
+    ## bone
+    rs.CurrentLayer("FE MT2")
+    MTH2_i = build_met(MTHsr_2, MTHw_2, MTsa_2, 0, 1)
+    MTH2_i = rs.MoveObject(MTH2_i, [0, 0, MTHsr_2 + PTT_2])
+    
+    ## tissue
+    rs.CurrentLayer("FE MT2 Tissue")
+    points = [[-5, 15, 0], [-5, -15, 0], [5, -15, 0], [5, 15, 0],
+              [-5, 15, MTHsr_2 + PTT_2], [-5, -15, MTHsr_2 + PTT_2], 
+              [5, -15, MTHsr_2 + PTT_2], [5, 15, MTHsr_2 + PTT_2]]
+    MTH2_tissue = rs.AddBox(points)
+    
+    ## boolean
+    MTH2_tis = rs.BooleanDifference(MTH2_tissue, MTH2_i, delete_input = False)
+    rs.DeleteObject(MTH2_tissue)
 #    
 #    
 #    # =========================================================================
