@@ -185,7 +185,6 @@ def FE_parts():
     PTT_LS = float(data[3])
     PTT_MS = float(data[5])
     PTT_2 = float(data[7])
-    print(PTT_2)
     PTT_3 = float(data[9])
     PTT_4 = float(data[11])
     PTT_5 = float(data[13])
@@ -359,7 +358,7 @@ def FE_parts():
     L_ses = rs.MoveObject(L_ses, [0, 0, LS_adj[2]]) 
     M_ses = rs.MoveObject(M_ses, [0, 0, MS_adj[2]]) 
     
-    ## Make Met 1
+    ## Union Met 1 parts
     MTH1 = rs.BooleanUnion([MTH1, L_ses, M_ses])
     #MTH1_ = rs.CopyObject(MTH1)
     
@@ -372,15 +371,15 @@ def FE_parts():
     MT1_prox_ml = (math.sin(math.radians(MTca_1)) * MTl_1) + MLD_1
     MT1_prox_ap = ((math.cos(math.radians(MTsa_1)) * MTl_1) + MAP_1) * -1
     MT2_prox_h = math.sin(math.radians(MTsa_2)) * MTl_2 + PTT_2 + MTHsr_2 + MT2_adj[2]
-    #MT2_prox_ap
+    MT2_prox_ap = ((math.cos(math.radians(MTsa_2)) * MTl_2) + MAP_2) * -1
     MT3_prox_h = math.sin(math.radians(MTsa_3)) * MTl_3 + PTT_3 + MTHsr_3 + MT3_adj[2]
-    #MT3_prox_ap
+    MT3_prox_ap = ((math.cos(math.radians(MTsa_3)) * MTl_3)) * -1
     MT4_prox_h = math.sin(math.radians(MTsa_4)) * MTl_4 + PTT_4 + MTHsr_4 + MT4_adj[2]
     MT4_prox_ml = math.sin(math.radians(MTca_4)) * MTl_4 + MLD_4
-    #MT4_prox_ap
+    MT4_prox_ap = ((math.cos(math.radians(MTsa_4)) * MTl_4) + MAP_4) * -1
     MT5_prox_h = math.sin(math.radians(MTsa_5)) * MTl_5 + PTT_5 + MTHsr_5 + MT5_adj[2]
     MT5_prox_ml = math.sin(math.radians(MTca_5)) * MTl_5 + MLD_5
-    #MT5_prox_ap
+    MT5_prox_ap = ((math.cos(math.radians(MTsa_5)) * MTl_5) + MAP_5) * -1
     
     curve_MT1 = rs.AddPolyline([[MLD_1, 100, PTT_1 + MTHw_1 * 0.5],
                                 [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5],
@@ -388,19 +387,19 @@ def FE_parts():
                                 [MT1_prox_ml, -300, MT1_prox_h]])
     curve_MT2 = rs.AddPolyline([[MLD_2, 100, PTT_2 + MTHsr_2],
                                 [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2],
-                                [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
+                                [MLD_2, MT2_prox_ap, MT2_prox_h], 
                                 [MLD_2, -300, MT2_prox_h]])
     curve_MT3 = rs.AddPolyline([[0, 100, PTT_3 + MTHsr_3],
                                 [0, 0, PTT_3 + MTHsr_3],
-                                [0, MTl_3 * -1, MT3_prox_h],
+                                [0, MT3_prox_ap, MT3_prox_h],
                                 [0, -300, MT3_prox_h]])
     curve_MT4 = rs.AddPolyline([[MLD_4, 100, PTT_4 + MTHsr_4],
                                 [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4],
-                                [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
+                                [MT4_prox_ml, MT1_prox_ap, MT4_prox_h], 
                                 [MT4_prox_ml, -300, MT4_prox_h]])
     curve_MT5 = rs.AddPolyline([[MLD_5, 100, PTT_5 + MTHsr_5],
                                 [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5],
-                                [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h],
+                                [MT5_prox_ml, MT5_prox_ap, MT5_prox_h],
                                 [MT5_prox_ml, -300, MT5_prox_h]])
     
     if side == "RIGHT":
@@ -418,53 +417,53 @@ def FE_parts():
         MLD_5_ofs_prox = MT5_prox_ml - 50
         MLD_1_ofs_prox = MT1_prox_ml + 50
     
-#    dorsal_surface = rs.AddLoftSrf([curve_med, curve_MT1, curve_MT2, curve_MT3, 
-#                                    curve_MT4, curve_MT5, curve_lat], 
-#                                    loft_type = 2)
-#    
-#    ## Distal cut
-#    distal_curve = rs.AddPolyline([[MLD_1_ofs, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
-#                                      [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
-#                                      [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2], 
-#                                      [0, 0, PTT_3 + MTHsr_3], 
-#                                      [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4], 
-#                                      [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5], 
-#                                      [MLD_5_ofs, MAP_5 * -1, PTT_5 + MTHsr_5]])
-#    distal_curve = rs.MoveObject(distal_curve, [0, MAP_2 + MTHsr_2 + 10, -50])
-#    distal_surface = rs.ExtrudeCurveStraight(distal_curve, 
-#                                             [0, 0, -50], [0, 0, 100])
-#    rs.DeleteObject(distal_curve)
+    dorsal_surface = rs.AddLoftSrf([curve_med, curve_MT1, curve_MT2, curve_MT3, 
+                                    curve_MT4, curve_MT5, curve_lat], 
+                                    loft_type = 2)
     
-#    ## Proximal cut
-#    proximal_curve = rs.AddPolyline([[MLD_1_ofs_prox, MTl_1 * -1 - MAP_1, MT1_prox_h], 
-#                                        [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h],
-#                                        [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
-#                                        [0, MTl_3 * -1, MT3_prox_h], 
-#                                        [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
-#                                        [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h], 
-#                                        [MLD_5_ofs_prox, MTl_5 * -1 - MAP_5, MT5_prox_h]])
-#    proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -100])
-#    proximal_surface = rs.ExtrudeCurveStraight(proximal_curve, 
-#                                               [0, 0, -100], [0, 0, 100])
-#    rs.DeleteObjects([proximal_curve, distal_curve, curve_lat, curve_med,
-#                      curve_MT1, curve_MT2, curve_MT3, curve_MT4, curve_MT5])
+    ## Distal cut
+    distal_curve = rs.AddPolyline([[MLD_1_ofs, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
+                                      [MLD_1, MAP_1 * -1, PTT_1 + MTHw_1 * 0.5], 
+                                      [MLD_2, MAP_2 * -1, PTT_2 + MTHsr_2], 
+                                      [0, 0, PTT_3 + MTHsr_3], 
+                                      [MLD_4, MAP_4 * -1, PTT_4 + MTHsr_4], 
+                                      [MLD_5, MAP_5 * -1, PTT_5 + MTHsr_5], 
+                                      [MLD_5_ofs, MAP_5 * -1, PTT_5 + MTHsr_5]])
+    distal_curve = rs.MoveObject(distal_curve, [0, MAP_2 + MTHsr_2 + 10, -50])
+    distal_surface = rs.ExtrudeCurveStraight(distal_curve, 
+                                             [0, 0, -50], [0, 0, 100])
+    rs.DeleteObject(distal_curve)
+    
+    ## Proximal cut
+    proximal_curve = rs.AddPolyline([[MLD_1_ofs_prox, MTl_1 * -1 - MAP_1, MT1_prox_h], 
+                                        [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h],
+                                        [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
+                                        [0, MTl_3 * -1, MT3_prox_h], 
+                                        [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
+                                        [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h], 
+                                        [MLD_5_ofs_prox, MTl_5 * -1 - MAP_5, MT5_prox_h]])
+    proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -100])
+    proximal_surface = rs.ExtrudeCurveStraight(proximal_curve, 
+                                               [0, 0, -100], [0, 0, 100])
+    rs.DeleteObjects([proximal_curve, distal_curve, curve_lat, curve_med,
+                      curve_MT1, curve_MT2, curve_MT3, curve_MT4, curve_MT5])
     
     ## trim insole
-#    insole_FE = meshBoolSplit(insole_FE, distal_surface, "prox")
-#    insole_FE = meshBoolSplit(insole_FE, proximal_surface, "dist")
+    insole_FE = meshBoolSplit(insole_FE, distal_surface, "prox")
+    insole_FE = meshBoolSplit(insole_FE, proximal_surface, "dist")
     
     ## boolean difference of tissue block and mets
-#    scanFE = meshBoolSplit(scanFE, distal_surface, "prox")
-#    scanFE = meshBoolSplit(scanFE, proximal_surface, "dist")
-#    rs.HideObjects([distal_surface, proximal_surface])
-#    scanFE = meshBoolDiff(scanFE, MTH1[0])
-#    scanFE = meshBoolDiff(scanFE[0], MTH2)
-#    scanFE = meshBoolDiff(scanFE[0], MTH3)
-#    scanFE = meshBoolDiff(scanFE[0], MTH4)
-#    scanFE = meshBoolDiff(scanFE[0], MTH5)
-#    soft_tissue_FE = meshBoolSplit(scanFE[0], dorsal_surface[0], "plant")
-#    soft_tissue_FE2 = rs.CopyObject(soft_tissue_FE)
-#    rs.HideObject(dorsal_surface)
+    scanFE = meshBoolSplit(scanFE, distal_surface, "prox")
+    scanFE = meshBoolSplit(scanFE, proximal_surface, "dist")
+    rs.HideObjects([distal_surface, proximal_surface])
+    scanFE = meshBoolDiff(scanFE, MTH1[0])
+    scanFE = meshBoolDiff(scanFE[0], MTH2)
+    scanFE = meshBoolDiff(scanFE[0], MTH3)
+    scanFE = meshBoolDiff(scanFE[0], MTH4)
+    scanFE = meshBoolDiff(scanFE[0], MTH5)
+    soft_tissue_FE = meshBoolSplit(scanFE[0], dorsal_surface[0], "plant")
+    soft_tissue_FE2 = rs.CopyObject(soft_tissue_FE)
+    rs.HideObject(dorsal_surface)
     
     
     # =========================================================================
