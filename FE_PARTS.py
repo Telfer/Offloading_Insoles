@@ -440,13 +440,13 @@ def FE_parts():
     rs.DeleteObject(distal_curve)
     
     ## Proximal cut
-    proximal_curve = rs.AddPolyline([[MLD_1_ofs_prox, MTl_1 * -1 - MAP_1, MT1_prox_h], 
-                                     [MT1_prox_ml, MTl_1 * -1 - MAP_1, MT1_prox_h],
-                                     [MLD_2, MTl_2 * -1 - MAP_2, MT2_prox_h], 
-                                     [0, MTl_3 * -1, MT3_prox_h], 
-                                     [MT4_prox_ml, MTl_4 * -1 - MAP_4, MT4_prox_h], 
-                                     [MT5_prox_ml, MTl_5 * -1 - MAP_5, MT5_prox_h], 
-                                     [MLD_5_ofs_prox, MTl_5 * -1 - MAP_5, MT5_prox_h]])
+    proximal_curve = rs.AddPolyline([[MLD_1_ofs_prox, MT1_prox_ap, MT1_prox_h], 
+                                     [MT1_prox_ml, MT1_prox_ap, MT1_prox_h],
+                                     [MLD_2, MT2_prox_ap, MT2_prox_h], 
+                                     [0, MT3_prox_ap, MT3_prox_h], 
+                                     [MT4_prox_ml, MT4_prox_ap, MT4_prox_h], 
+                                     [MT5_prox_ml, MT5_prox_ap, MT5_prox_h], 
+                                     [MLD_5_ofs_prox, MT5_prox_ap, MT5_prox_h]])
     proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -100])
     proximal_surface = rs.ExtrudeCurveStraight(proximal_curve, 
                                                [0, 0, -100], [0, 0, 100])
