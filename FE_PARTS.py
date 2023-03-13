@@ -462,7 +462,7 @@ def FE_parts():
     ## boolean difference of tissue block and mets
     scanFE = meshBoolSplit(scanFE, distal_surface, "prox")
     scanFE = meshBoolSplit(scanFE, proximal_surface, "dist")
-    rs.HideObjects([distal_surface, proximal_surface])
+    rs.HideObjects([distal_surface, proximal_surface, distal_surface2, proximal_surface2])
     soft_tissue_FE = meshBoolSplit(scanFE, dorsal_surface, "plant")
     soft_tissue_FE = meshBoolDiff(soft_tissue_FE, MTH1[0])
     soft_tissue_FE = meshBoolDiff(soft_tissue_FE[0], MTH2)
