@@ -437,6 +437,7 @@ def FE_parts():
     distal_curve = rs.MoveObject(distal_curve, [0, MAP_2 + MTHsr_2 + 10, -50])
     distal_surface = rs.ExtrudeCurveStraight(distal_curve, 
                                              [0, 0, -50], [0, 0, 100])
+    distal_surface2 = rs.CopyObject(distal_surface, [0, 5, 0])
     rs.DeleteObject(distal_curve)
     
     ## Proximal cut
@@ -450,12 +451,13 @@ def FE_parts():
     proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -100])
     proximal_surface = rs.ExtrudeCurveStraight(proximal_curve, 
                                                [0, 0, -100], [0, 0, 100])
+    proximal_surface2 = rs.CopyObject(proximal_surface, [0, -5, 0])
     rs.DeleteObjects([proximal_curve, distal_curve, curve_lat, curve_med,
                       curve_MT1, curve_MT2, curve_MT3, curve_MT4, curve_MT5])
     
     ## trim insole
-    insole_FE = meshBoolSplit(insole_FE, distal_surface, "prox")
-    insole_FE = meshBoolSplit(insole_FE, proximal_surface, "dist")
+    insole_FE = meshBoolSplit(insole_FE, distal_surface2, "prox")
+    insole_FE = meshBoolSplit(insole_FE, proximal_surface2, "dist")
     
     ## boolean difference of tissue block and mets
     scanFE = meshBoolSplit(scanFE, distal_surface, "prox")
