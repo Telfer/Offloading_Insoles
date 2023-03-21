@@ -274,7 +274,7 @@ def FE_parts():
     
     ## Make met 1
     MTH1 = rs.AddSphere([0, 0, 0], MTHw_1 / 2)
-    MTsh_1 = rs.AddCylinder(rs.WorldZXPlane(), (MTl_1 + 5) * -1, MTHw_1 / 2 - 0.5)
+    MTsh_1 = rs.AddCylinder(rs.WorldZXPlane(), MTl_1 * -1, MTHw_1 / 2 - 0.5)
     MTH1 = rs.BooleanUnion([MTH1, MTsh_1])
     MTH1 = rs.RotateObject(MTH1, [0, 0, 0], MTsa_1 * -1, [1, 0, 0])
     MTH1 = rs.RotateObject(MTH1, [0, 0, 0], MTca_1, [0, 0, 1])
@@ -427,14 +427,14 @@ def FE_parts():
     dorsal_surface = rs.MoveObject(dorsal_surface, [0, 0, -1])
     
     ## Distal cut
-    distal_curve = rs.AddPolyline([[MLD_1_ofs, MAP_1 * -1, MT1_dist_h], 
-                                   [MLD_1, MAP_1 * -1, MT1_dist_h], 
-                                   [MLD_2, MAP_2 * -1, MT2_dist_h], 
-                                   [0, 0, MT3_dist_h], 
-                                   [MLD_4, MAP_4 * -1, MT4_dist_h], 
-                                   [MLD_5, MAP_5 * -1, MT5_dist_h], 
-                                   [MLD_5_ofs, MAP_5 * -1, MT1_dist_h]])
-    distal_curve = rs.MoveObject(distal_curve, [0, MAP_2 + MTHsr_2 + 10, -50])
+    distal_curve = rs.AddPolyline([[MLD_1_ofs, MAP_1 * -1 + (MTHw_1 / 2) + 5, MT1_dist_h], 
+                                   [MLD_1, MAP_1 * -1 + MTHw_1 / 2 + 5, MT1_dist_h], 
+                                   [MLD_2, MAP_2 * -1 + MTHsr_2 + 5, MT2_dist_h], 
+                                   [0, MTHsr_3 + 5, MT3_dist_h], 
+                                   [MLD_4, MAP_4 * -1 + MTHsr_4 + 8, MT4_dist_h], 
+                                   [MLD_5, MAP_5 * -1 + MTHsr_5 + 5, MT5_dist_h], 
+                                   [MLD_5_ofs, MAP_5 * -1 + MTHsr_5 + 5, MT1_dist_h]])
+    distal_curve = rs.MoveObject(distal_curve, [0, 0, -50])
     distal_surface = rs.ExtrudeCurveStraight(distal_curve, 
                                              [0, 0, -50], [0, 0, 100])
     distal_surface2 = rs.CopyObject(distal_surface, [0, 5, 0])
@@ -448,7 +448,7 @@ def FE_parts():
                                      [MT4_prox_ml, MT4_prox_ap, MT4_prox_h], 
                                      [MT5_prox_ml, MT5_prox_ap, MT5_prox_h], 
                                      [MLD_5_ofs_prox, MT5_prox_ap, MT5_prox_h]])
-    proximal_curve = rs.MoveObject(proximal_curve, [0, 5, -100])
+    proximal_curve = rs.MoveObject(proximal_curve, [0, -5, -100])
     proximal_surface = rs.ExtrudeCurveStraight(proximal_curve, 
                                                [0, 0, -100], [0, 0, 100])
     proximal_surface2 = rs.CopyObject(proximal_surface, [0, -5, 0])
