@@ -236,15 +236,23 @@ def FE_parts():
         MTca_5 = float(data[63])
     
     ## MLD_x - Mediolateral displacement of metatarsals(relative to 3MTH)
-    MLD_LS = float(data[65])
-    MLD_MS = float(data[67])
-    MLD_1 = (MLD_LS + MLD_MS) * 0.5
-    MLD_2 = float(data[69])
-    MLD_4 = float(data[71]) * -1
-    MLD_5 = float(data[73]) * -1
+    if side == "LEFT":
+        MLD_LS = float(data[65])
+        MLD_MS = float(data[67])
+        MLD_1 = (MLD_LS + MLD_MS) * 0.5
+        MLD_2 = float(data[69])
+        MLD_4 = float(data[71]) * -1
+        MLD_5 = float(data[73]) * -1
+    else:
+        MLD_LS = float(data[65]) * -1
+        MLD_MS = float(data[67]) * -1
+        MLD_1 = (MLD_LS + MLD_MS) * 0.5
+        MLD_2 = float(data[69]) * -1
+        MLD_4 = float(data[71])
+        MLD_5 = float(data[73])
     
     ## MTH1 width and shaft radius
-    MTHw_1 = (MLD_MS - MLD_LS) + (MTHw_LS * 0.5) + (MTHw_MS * 0.5) + 2
+    MTHw_1 = abs(MLD_MS - MLD_LS) + (MTHw_LS * 0.5) + (MTHw_MS * 0.5) + 2
     MTr_1 = MTHw_1 * 0.4
     
     ## Sesamoids
@@ -307,6 +315,9 @@ def FE_parts():
     L_ses = rs.BooleanDifference(L_ses, cyl)
     M_ses = rs.BooleanDifference(M_ses, cyl2)
     
+    ## met color
+    rs.ObjectColor([MTH1, MTH2, MTH3, MTH4, MTH5], [255, 0, 0])
+    
     
     # =========================================================================
     
@@ -336,13 +347,13 @@ def FE_parts():
     
     # adjust met height
     ## get points on tissue
-    LS_adj = pointFromMeshCurveInt([MLD_LS, MAP_LS, 0], scanFE)
-    MS_adj = pointFromMeshCurveInt([MLD_MS, MAP_MS, 0], scanFE)
+    LS_adj = pointFromMeshCurveInt([MLD_LS, MAP_LS * -1, 0], scanFE)
+    MS_adj = pointFromMeshCurveInt([MLD_MS, MAP_MS * -1, 0], scanFE)
     MT1_adj = pointFromMeshCurveInt([MLD_1, MAP_1, 0], scanFE)
-    MT2_adj = pointFromMeshCurveInt([MLD_2, MAP_2, 0], scanFE)
+    MT2_adj = pointFromMeshCurveInt([MLD_2, MAP_2 * -1, 0], scanFE)
     MT3_adj = pointFromMeshCurveInt([0, 0, 0], scanFE)
-    MT4_adj = pointFromMeshCurveInt([MLD_4, MAP_4, 0], scanFE)
-    MT5_adj = pointFromMeshCurveInt([MLD_5, MAP_5, 0], scanFE)
+    MT4_adj = pointFromMeshCurveInt([MLD_4, MAP_4 * -1, 0], scanFE)
+    MT5_adj = pointFromMeshCurveInt([MLD_5, MAP_5 * -1, 0], scanFE)
     
     ## move mets/sesamoids
     MTH1 = rs.MoveObject(MTH1, [0, 0, MT1_adj[2]])
@@ -477,6 +488,7 @@ def FE_parts():
     # Parts for inverse FE tissue
     ## bone
     rs.CurrentLayer("FE MT2")
+    if MTHw_2 < 10.4: MTHw_2 = 10.4
     MTH2_i = build_met(MTHsr_2, MTHw_2, MTsa_2, 0, 1)
     MTH2_i = rs.MoveObject(MTH2_i, [0, 0, MTHsr_2 + PTT_2])
     
