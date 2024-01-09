@@ -325,67 +325,78 @@ def DI_BUILD():
     
     ### mtpj1 points
     mtpj1 = [mtpj1_mb[0], mtpj1_mb[1], mtpj1_lm[2]]
-    mtpj1_prox = point_on_line(mtpj1, arch_medial, -3)
-    mtpj1_prox[2] = mtpj1_prox[2] + 1
-    mtpj1_dist1 = [mtpj1_mb_dist1[0], mtpj1_mb_dist1[1], -2]
-    mtpj1_dist2 = [mtpj1_mb_dist2[0], mtpj1_mb_dist2[1], -3]
+    mtpj1_prox1 = point_on_line(mtpj1, arch_medial, -5)
+    mtpj1_prox1[2] = mtpj1_prox1[2] + 1
+    mtpj1_prox2 = point_on_line(mtpj1, arch_medial, -10)
+    mtpj1_prox2[2] = mtpj1_prox2[2] + 1
+    mtpj1_dist1 = [mtpj1_mb_dist1[0], mtpj1_mb_dist1[1], -3]
+    mtpj1_dist2 = [mtpj1_mb_dist2[0], mtpj1_mb_dist2[1], -4]
     
     ### mtpj2 points
     mtpj2 = [mtpj2_lm[0], mtpj2_lm[1], mtpj2_lm[2]]
-    mtpj2_prox = point_on_line(mtpj2, arch_center_med_lm, -3)
-    mtpj2_prox = [mtpj2_prox[0], mtpj2_prox[1], mtpj2_prox[2] + 1]
-    mtpj2_dist1 = [mtpj2[0], mtpj2[1] + 5, -2]
-    mtpj2_dist2 = [mtpj2[0], mtpj2[1] + 10, -3]
+    mtpj2_prox1 = point_on_line(mtpj2, arch_center_med_lm, -5)
+    mtpj2_prox1 = [mtpj2_prox1[0], mtpj2_prox1[1], mtpj2_prox1[2]]
+    mtpj2_prox2 = point_on_line(mtpj2, arch_center_med_lm, -10)
+    mtpj2_prox2 = [mtpj2_prox2[0], mtpj2_prox2[1], mtpj2_prox2[2]]
+    mtpj2_dist1 = [mtpj2[0], mtpj2[1] + 5, -3]
+    mtpj2_dist2 = [mtpj2[0], mtpj2[1] + 10, -4]
     
     ### mtpj3 points
     mtpj3 = [mtpj3_lm[0], mtpj3_lm[1], mtpj3_lm[2]]
-    mtpj3_prox = point_on_line(mtpj3, arch_center_lm, -3)
-    mtpj3_prox = [mtpj3_prox[0], mtpj3_prox[1], mtpj3_prox[2] + 1]
-    mtpj3_dist1 = [mtpj3[0], mtpj3[1] + 5, -2]
-    mtpj3_dist2 = [mtpj3[0], mtpj3[1] + 10, -3]
+    mtpj3_prox1 = point_on_line(mtpj3, arch_center_lm, -5)
+    mtpj3_prox1 = [mtpj3_prox1[0], mtpj3_prox1[1], mtpj3_prox1[2]]
+    mtpj3_prox2 = point_on_line(mtpj3, arch_center_lm, -10)
+    mtpj3_prox2 = [mtpj3_prox2[0], mtpj3_prox2[1], mtpj3_prox2[2]]
+    mtpj3_dist1 = [mtpj3[0], mtpj3[1] + 5, -3]
+    mtpj3_dist2 = [mtpj3[0], mtpj3[1] + 10, -4]
     
     ### mtpj4 points
     mtpj4 = [mtpj4_lm[0], mtpj4_lm[1], mtpj4_lm[2]]
-    mtpj4_prox = point_on_line(mtpj4, arch_center_lat_lm, -3)
-    mtpj4_prox = [mtpj4_prox[0], mtpj4_prox[1], mtpj4_prox[2] + 1]
-    mtpj4_dist1 = [mtpj4[0], mtpj4[1] + 5, -2]
-    mtpj4_dist2 = [mtpj4[0], mtpj4[1] + 10, -3]
+    mtpj4_prox1 = point_on_line(mtpj4, arch_center_lat_lm, -5)
+    mtpj4_prox1 = [mtpj4_prox1[0], mtpj4_prox1[1], mtpj4_prox1[2]]
+    mtpj4_prox2 = point_on_line(mtpj4, arch_center_lat_lm, -10)
+    mtpj4_prox2 = [mtpj4_prox2[0], mtpj4_prox2[1], mtpj4_prox2[2]]
+    mtpj4_dist1 = [mtpj4[0], mtpj4[1] + 5, -3]
+    mtpj4_dist2 = [mtpj4[0], mtpj4[1] + 10, -4]
     
     ### mtpj5 points
     mtpj5 = [mtpj5_mb[0], mtpj5_mb[1], mtpj5_lm[2]]
-    mtpj5_prox = point_on_line(mtpj5, arch_lateral, -3)
-    mtpj5_prox = [mtpj5_prox[0], mtpj5_prox[1], mtpj5_prox[2] + 1]
-    mtpj5_dist1 = [mtpj5_mb_dist1[0], mtpj5_mb_dist1[1], -2]
-    mtpj5_dist2 = [mtpj5_mb_dist2[0], mtpj5_mb_dist2[1], -3]
+    mtpj5_prox1 = point_on_line(mtpj5, arch_lateral, -5)
+    mtpj5_prox1 = [mtpj5_prox1[0], mtpj5_prox1[1], mtpj5[2]]
+    mtpj5_prox2 = point_on_line(mtpj5, arch_lateral, -10)
+    mtpj5_prox2 = [mtpj5_prox2[0], mtpj5_prox2[1], mtpj5[2]]
+    #mtpj5_prox = [mtpj5_prox[0], mtpj5_prox[1], mtpj5[2] + 1]
+    mtpj5_dist1 = [mtpj5_mb_dist1[0], mtpj5_mb_dist1[1], -3]
+    mtpj5_dist2 = [mtpj5_mb_dist2[0], mtpj5_mb_dist2[1], -4]
     
     ### forefoot points
     #mtpj_mid_prox = [mtpj3[0], mtpj3[1] - 1, mtpj3[2] + 0.5]
-    mtpj_mid_prox = mtpj3_prox
+    mtpj_mid_prox = mtpj3_prox1
     mtpj_mid = mtpj3
-    mtpj_mid_dist1 = [mtpj_mid[0], mtpj_mid[1] + 8, -2]
-    mtpj_mid_dist2 = [mtpj_mid[0], mtpj_mid[1] + 12, -3]
+    mtpj_mid_dist1 = [mtpj_mid[0], mtpj_mid[1] + 8, -3]
+    mtpj_mid_dist2 = [mtpj_mid[0], mtpj_mid[1] + 12, -4]
     if side == "LEFT":
-        toe = [toe_pt_x[size + 1], toe_pt_y[size + 1], -3]
-        toe_med = [toe_med_x[size + 1], toe_med_y[size + 1], -3]
-        toe_lat = [toe_lat_x[size + 1], toe_lat_y[size + 1], -3]
+        toe = [toe_pt_x[size + 1], toe_pt_y[size + 1], -4]
+        toe_med = [toe_med_x[size + 1], toe_med_y[size + 1], -4]
+        toe_lat = [toe_lat_x[size + 1], toe_lat_y[size + 1], -4]
         toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] + 10, toe[1] -10, 0], [toe[0] + 10, toe[1] + 10, 0]))[0][1]
-        toe_med1[2] = -3
+        toe_med1[2] = -4
         toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] - 10, toe[1] -10, 0], [toe[0] - 10, toe[1] + 10, 0]))[0][1]
-        toe_lat1[2] = -3
-        ff_med = [ff_med_x[size + 1], ff_med_y[size + 1], -3]
-        ff_lat = [ff_lat_x[size + 1], ff_lat_y[size + 1], -3]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -3]
+        toe_lat1[2] = -4
+        ff_med = [ff_med_x[size + 1], ff_med_y[size + 1], -4]
+        ff_lat = [ff_lat_x[size + 1], ff_lat_y[size + 1], -4]
+        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -4]
     else:
-        toe = [toe_pt_x[size + 1] * - 1, toe_pt_y[size + 1], -3]
-        toe_med = [toe_med_x[size + 1] * -1, toe_med_y[size + 1], -3]
-        toe_lat = [toe_lat_x[size + 1] * -1, toe_lat_y[size + 1], -3]
+        toe = [toe_pt_x[size + 1] * - 1, toe_pt_y[size + 1], -4]
+        toe_med = [toe_med_x[size + 1] * -1, toe_med_y[size + 1], -4]
+        toe_lat = [toe_lat_x[size + 1] * -1, toe_lat_y[size + 1], -4]
         toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] - 10, toe[1] -10, 0], [toe[0] - 10, toe[1] + 10, 0]))[0][1]
-        toe_med1[2] = -3
+        toe_med1[2] = -4
         toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] + 10, toe[1] -10, 0], [toe[0] + 10, toe[1] + 10, 0]))[0][1]
-        toe_lat1[2] = -3
-        ff_med = [ff_med_x[size + 1] * -1, ff_med_y[size + 1], -3]
-        ff_lat = [ff_lat_x[size + 1] * -1, ff_lat_y[size + 1], -3]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 15, -3]
+        toe_lat1[2] = -4
+        ff_med = [ff_med_x[size + 1] * -1, ff_med_y[size + 1], -4]
+        ff_lat = [ff_lat_x[size + 1] * -1, ff_lat_y[size + 1], -4]
+        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 15, -4]
     
     ### heel points
     heel_center = [0, heel_center_pt_y[size + 1], heel_cup_height]
@@ -415,17 +426,17 @@ def DI_BUILD():
     
     ### construct medial curve
     medial_curve = make_curve([heel_center, heel_center_medial, heel_medial, 
-                               arch_medial, mtpj1_prox, mtpj1, mtpj1_dist1, 
+                               arch_medial, mtpj1_prox2, mtpj1_prox1, mtpj1, mtpj1_dist1, 
                                mtpj1_dist2, ff_med, toe_med, toe_med1, toe])
     
     ### construct lateral curve
     lateral_curve = make_curve([toe, toe_lat1, toe_lat, ff_lat, mtpj5_dist2, mtpj5_dist1, 
-                                mtpj5, mtpj5_prox, arch_lateral, heel_lateral, 
+                                mtpj5, mtpj5_prox1, mtpj5_prox2, arch_lateral, heel_lateral, 
                                 heel_center_lateral, heel_center])
     
     ### construct central curve (runs along long axis of foot)
     central_curve = make_curve([heel_center, heel_mid_post, heel_mid, arch_center,
-                                mtpj_mid_prox, mtpj_mid, mtpj_mid_dist1,
+                                mtpj3_prox2, mtpj_mid_prox, mtpj_mid, mtpj_mid_dist1,
                                 mtpj_mid_dist2, ff_mid, toe])
     
     ### construct arch curve (runs mediolateral across arch of foot)
@@ -433,8 +444,10 @@ def DI_BUILD():
                              arch_center_lat, arch_lateral])
     
     ### construct forefoot curve
-    forefoot_curve1 = make_curve([mtpj1_prox, mtpj2_prox, mtpj3_prox, 
-                                  mtpj4_prox, mtpj5_prox])
+    forefoot_curve = make_curve([mtpj1_prox2, mtpj2_prox2, mtpj3_prox2, 
+                                 mtpj4_prox2, mtpj5_prox2])
+    forefoot_curve1 = make_curve([mtpj1_prox1, mtpj2_prox1, mtpj3_prox1, 
+                                  mtpj4_prox1, mtpj5_prox1])
     forefoot_curve2 = make_curve([mtpj1, mtpj2, mtpj3, mtpj4, mtpj5]) 
     forefoot_curve3 = make_curve([mtpj1_dist1, mtpj2_dist1, mtpj3_dist1, 
                                   mtpj4_dist1, mtpj5_dist1])
@@ -448,7 +461,7 @@ def DI_BUILD():
     
     ### make top surface
     top = rs.AddNetworkSrf([medial_curve, lateral_curve, central_curve, 
-                            arch_curve, forefoot_curve1, forefoot_curve2, 
+                            arch_curve, forefoot_curve, forefoot_curve1, forefoot_curve2, 
                             forefoot_curve3, forefoot_curve4, forefoot_curve5, 
                             cross_curve_heel])
     rs.RebuildSurface(top, pointcount = (100, 12))

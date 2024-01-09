@@ -58,7 +58,7 @@ def DI_POSITION():
     foot_axis = rs.VectorCreate(heel_pt, ff_mid)
     global_axis = rs.VectorCreate([0, 0, 0], [0, 1, 0])
     trans_mat2 = rs.XformRotation3(foot_axis, global_axis, [0, 0, 0])
-    rs.TransformObjects([scan, heel_pt, MTH1_pt, MTH5_pt, arch_pt], trans_mat2,)
+    rs.TransformObjects([scan, heel_pt, MTH1_pt, MTH5_pt, arch_pt], trans_mat2)
     
     ## center
     ### Determine foot center point

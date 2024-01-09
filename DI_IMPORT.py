@@ -72,8 +72,8 @@ def DI_IMPORT():
     
     # Info
     ## shoe size
-    items = ["M9.0", "M9.5", "W8.5", "M12.0", "M10.0", "M10.5", "M11.0", "M11.5", 
-             "M13.0", "W8.0", "W9.0", "W9.5"]
+    items = ["W8.5", "W9.0", "W9.5", "M9.0", "M9.5", "M10.0", "M10.5", "M11.0", 
+             "M11.5", "M12.0", "M13.0"]
     shoe_size = rs.MultiListBox(items, "Select shoe size", "Shoe size")[0]
     shoe_size_index = items.index(shoe_size)
     rs.CurrentLayer("Shoe_size")
