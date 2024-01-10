@@ -86,7 +86,7 @@ def DI_LANDMARKS():
     landmark_point("MTPJ5", "Identify MTH5")
     
     
-    # =============================================================================
+    # =========================================================================
     
     # Add additional variables
     rs.CurrentLayer("Heel Cup Height")

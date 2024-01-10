@@ -50,17 +50,6 @@ def PRESSURE_IMAGE ():
                                             hal_scan[2] - hal_press[2]])
     heel_press = rs.coerce3dpoint(heel_press)
     
-    # scale pressure
-    ## measured distances
-    #scan_dist = rs.Distance(hal_scan, heel_scan)
-    #press_dist = rs.Distance(hal_scan, heel_press)
-    
-    ## ratio
-    #ratio = scan_dist / press_dist
-    
-    ## scale
-    #picture = rs.ScaleObject(picture, hal_scan, [ratio, ratio, ratio])
-    
     ## align pressure
     scan_axis = rs.VectorCreate(hal_scan, heel_scan)
     press_axis = rs.VectorCreate(hal_scan, heel_press)

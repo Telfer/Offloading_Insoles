@@ -131,7 +131,7 @@ def DI_BUILD():
     
     ## Get shoe size
     size = rs.ObjectsByLayer("Shoe_size")[0]
-    size = int(rs.coerce3dpoint(size)[2]) * 2
+    size = int(rs.coerce3dpoint(size)[2]) + 1
     
     ## heel cup height
     heel_cup_height = rs.ObjectsByLayer("Heel Cup Height")[0]
@@ -145,69 +145,48 @@ def DI_BUILD():
     # =========================================================================
     
     # surface outlines
-    ## outline data points
-    heel_center_pt_y = [-126, -132, -126, -134, -115, -122, -136, -142]
-    heel_lateral_pt_x = [-24, -30, -22.5, -28.9, -22, -27, -25, -31]
-    heel_lateral_pt_y = [-100, -100, -100, -102, -95, -100, -103, -103]
-    heel_medial_pt_x = [29, 36, 24.9, 33.1, 26.0, 33, 31, 34]
-    heel_medial_pt_y = [-100, -100, -100, -100, -100, -100, -100, -100]
-    heel_center_medial_x = [18, 20, 16.8, 20.5, 17, 24, 17, 28]
-    heel_center_medial_y = [-121, -128, -120, -127, -110, -115, -130, -125]
-    heel_center_lateral_x = [-15, -17.5, -13.9, -17.8, -19, -22, -14, -15]
-    heel_center_lateral_y = [-121, -124.5, -119, -125.4, -105, -110, -131, -138]
-    arch_medial_pt_x = [25, 36, 17.2, 37.4, 21, 38, 13, 38]
-    arch_medial_pt_y = [-10, -12.7, -10, -13.3, -10, -10, -16, -16]
-    mtpj1_prox_x = [32, 41, 25.6, 43.4, 25, 44, 29, 47]
-    mtpj1_prox_y = [25, 25, 25, 23.4, 25, 25, 30, 30]
-    mtpj1_pt_x = [37, 44, 35, 46.6, 30, 46, 41, 50]
-    mtpj1_pt_y = [40, 40, 40, 38.1, 40, 40, 50, 50]
-    mtpj1_dist1_x = [39, 45.5, 38.6, 47.3, 33, 47, 43.5, 51]
-    mtpj1_dist1_y = [46, 46, 46.4, 42, 46, 46, 56, 56]
-    mtpj1_dist2_x = [40, 46, 40.6, 48.4, 36, 47, 45, 51]
-    mtpj1_dist2_y = [50, 50, 50, 50, 50, 50, 60, 60]
-    toe_med_x = [32, 35, 31, 34.2, 30, 35, 35, 40]
-    toe_med_y = [135, 136.7, 134.2, 135.9, 124, 124, 140, 145]
-    toe_pt_x = [12, 13, 11.4, 12.2, 12, 11, 7, 10]
-    toe_pt_y = [145, 146, 143.9, 147.8, 134, 140, 154, 160]
-    toe_lat_x = [-13, -15.4, -12.3, -15.4, -11, -19, -9, -18]
-    toe_lat_y = [136, 137.7, 135.3, 137.7, 124, 124, 150, 150]
-    mtpj5_pt_x = [-38, -41, -36.9, -45, -35, -41, -39, -46]
-    mtpj5_pt_y = [17, 17, 17, 17, 17, 17, 20, 20]
-    mtpj5_prox_x = [-37, -40, -34.5, -43.4, -34, -41, -37, -45]
-    mtpj5_prox_y = [9, 9, 9, 6.4, 9, 9, 10, 10]
-    mtpj5_dist1_x = [-38.5, -42, -37.5, -46, -36, -42, -39, -46]
-    mtpj5_dist1_y = [22, 22, 22, 22, 22, 22, 22, 22]
-    mtpj5_dist2_x = [-39, -42.5, -38.6, -47, -37, -42, -39, -47]
-    mtpj5_dist2_y = [27, 27, 27, 26, 27, 27, 30, 30]
-    arch_lateral_pt_x = [-31, -34, -27.7, -36.4, -26, -35, -28, -38]
-    arch_lateral_pt_y = [-40, -40, -40, -41, -40, -40, -40, -40]
-    ff_med_x = [46, 51, 44.5, 49.4, 40, 45, 47, 51]
-    ff_med_y = [80, 80, 80, 80, 80, 80, 80, 80]
-    ff_lat_x = [-40, -44.5, -40, -47.6, -37, -43, -38, -46]
-    ff_lat_y = [60, 60, 60, 60, 60, 60, 80, 80]
+    ## outline data points bottom
+    f = open("C:/Users/telfe/Dropbox/Orthotic_Software/Offloading_Insoles/outlines.txt")
+    data_bottom = []
+    for line in f:
+        row = line.split()
+        row[1] = float(row[1])
+        row[2] = float(row[2])
+        data_bottom.append(row)
+    f.close()
+    
+    ## outline data points top
+    f = open("C:/Users/telfe/Dropbox/Orthotic_Software/Offloading_Insoles/outlines2.txt")
+    data_top = []
+    for line in f:
+        row = line.split()
+        row[1] = float(row[1])
+        row[2] = float(row[2])
+        data_top.append(row)
+    f.close()
     
     ## bottom outline
     ### bottom outline points
-    heel_center = [0, heel_center_pt_y[size], 0]
-    heel_lateral = [heel_lateral_pt_x[size], heel_lateral_pt_y[size], 0]
-    heel_medial = [heel_medial_pt_x[size], heel_lateral_pt_y[size], 0]
-    heel_center_medial = [heel_center_medial_x[size], heel_center_medial_y[size], 0]
-    heel_center_lateral = [heel_center_lateral_x[size], heel_center_lateral_y[size], 0]
-    arch_medial = [arch_medial_pt_x[size], arch_medial_pt_y[size], 0]
-    mtpj1_prox = [mtpj1_prox_x[size], mtpj1_prox_y[size], 0]
-    mtpj1 = [mtpj1_pt_x[size], mtpj1_pt_y[size], 0]
-    mtpj1_dist1 = [mtpj1_dist1_x[size], mtpj1_dist1_y[size], 0]
-    mtpj1_dist2 = [mtpj1_dist2_x[size], mtpj1_dist2_y[size], 0]
-    ff_med = [ff_med_x[size], ff_med_y[size], 0]
-    toe = [toe_pt_x[size], toe_pt_y[size], 0]
-    toe_med = [toe_med_x[size], toe_med_y[size], 0]
-    toe_lat = [toe_lat_x[size], toe_lat_y[size], 0]
-    ff_lat =[ff_lat_x[size], ff_lat_y[size], 0]
-    mtpj5_prox = [mtpj5_prox_x[size], mtpj5_prox_y[size], 0]
-    mtpj5 = [mtpj5_pt_x[size], mtpj5_pt_y[size], 0]
-    mtpj5_dist1 = [mtpj5_dist1_x[size], mtpj5_dist1_y[size], 0]
-    mtpj5_dist2 = [mtpj5_dist2_x[size], mtpj5_dist2_y[size], 0]
-    arch_lateral = [arch_lateral_pt_x[size], arch_lateral_pt_y[size], 0]
+    heel_center = [0, data_bottom[0][size], 0]
+    heel_center_lateral = [data_bottom[1][size], data_bottom[2][size], 0]
+    heel_lateral = [data_bottom[3][size], data_bottom[4][size], 0]
+    arch_lateral = [data_bottom[5][size], data_bottom[6][size], 0]
+    mtpj5_prox = [data_bottom[7][size], data_bottom[8][size], 0]
+    mtpj5 = [data_bottom[9][size], data_bottom[10][size], 0]
+    mtpj5_dist1 = [data_bottom[11][size], data_bottom[12][size], 0]
+    mtpj5_dist2 = [data_bottom[13][size], data_bottom[14][size], 0]
+    ff_lat =[data_bottom[15][size], data_bottom[16][size], 0]
+    toe_lat = [data_bottom[17][size], data_bottom[18][size], 0]
+    toe = [data_bottom[19][size], data_bottom[20][size], 0]
+    toe_med = [data_bottom[21][size], data_bottom[22][size], 0]
+    ff_med = [data_bottom[23][size], data_bottom[24][size], 0]
+    mtpj1_dist2 = [data_bottom[25][size], data_bottom[26][size], 0]
+    mtpj1_dist1 = [data_bottom[27][size], data_bottom[28][size], 0]
+    mtpj1 = [data_bottom[29][size], data_bottom[30][size], 0]
+    mtpj1_prox = [data_bottom[31][size], data_bottom[32][size], 0]
+    arch_medial = [data_bottom[33][size], data_bottom[34][size], 0]
+    heel_medial = [data_bottom[35][size], data_bottom[36][size], 0]
+    heel_center_medial = [data_bottom[37][size], data_bottom[38][size], 0]
     
     ### bottom outline curve
     bottom_outline = make_curve([heel_center, heel_center_medial, 
@@ -219,26 +198,26 @@ def DI_BUILD():
     rs.RebuildCurve(bottom_outline, point_count = 50)
     
     ### mid outline points
-    heel_center_mo = [0, heel_center_pt_y[size + 1], 0]
-    heel_lateral_mo = [heel_lateral_pt_x[size + 1], heel_lateral_pt_y[size + 1], 0]
-    heel_medial_mo = [heel_medial_pt_x[size + 1], heel_medial_pt_y[size + 1], 0]
-    heel_center_medial_mo = [heel_center_medial_x[size + 1], heel_center_medial_y[size + 1], 0]
-    heel_center_lateral_mo = [heel_center_lateral_x[size + 1], heel_center_lateral_y[size + 1], 0]
-    arch_medial_mo = [arch_medial_pt_x[size + 1], arch_medial_pt_y[size + 1], 0]
-    mtpj1_prox_mo = [mtpj1_prox_x[size + 1], mtpj1_prox_y[size + 1], 0]
-    mtpj1_mo = [mtpj1_pt_x[size + 1], mtpj1_pt_y[size + 1], 0]
-    mtpj1_dist1_mo = [mtpj1_dist1_x[size + 1], mtpj1_dist1_y[size + 1], 0]
-    mtpj1_dist2_mo = [mtpj1_dist2_x[size + 1], mtpj1_dist2_y[size + 1], 0]
-    toe_mo = [toe_pt_x[size + 1], toe_pt_y[size + 1], 0]
-    toe_med_mo = [toe_med_x[size + 1], toe_med_y[size + 1], 0]
-    toe_lat_mo = [toe_lat_x[size + 1], toe_lat_y[size + 1], 0]
-    mtpj5_prox_mo = [mtpj5_prox_x[size + 1], mtpj5_prox_y[size + 1], 0]
-    mtpj5_mo = [mtpj5_pt_x[size + 1], mtpj5_pt_y[size + 1], 0]
-    mtpj5_dist1_mo = [mtpj5_dist1_x[size + 1], mtpj5_dist1_y[size + 1], 0]
-    mtpj5_dist2_mo = [mtpj5_dist2_x[size + 1], mtpj5_dist2_y[size + 1], 0]
-    arch_lateral_mo = [arch_lateral_pt_x[size + 1], arch_lateral_pt_y[size + 1], 0]
-    ff_med_mo = [ff_med_x[size + 1], ff_med_y[size + 1], 0]
-    ff_lat_mo = [ff_lat_x[size + 1], ff_lat_y[size + 1], 0]
+    heel_center_mo = [0, data_top[0][size], 0]
+    heel_center_lateral_mo = [data_top[1][size], data_top[2][size], 0]
+    heel_lateral_mo = [data_top[3][size], data_top[4][size], 0]
+    arch_lateral_mo = [data_top[5][size], data_top[6][size], 0]
+    mtpj5_prox_mo = [data_top[7][size], data_top[8][size], 0]
+    mtpj5_mo = [data_top[9][size], data_top[10][size], 0]
+    mtpj5_dist1_mo = [data_top[11][size], data_top[12][size], 0]
+    mtpj5_dist2_mo = [data_top[13][size], data_top[14][size], 0]
+    ff_lat_mo =[data_top[15][size], data_top[16][size], 0]
+    toe_lat_mo = [data_top[17][size], data_top[18][size], 0]
+    toe_mo = [data_top[19][size], data_top[20][size], 0]
+    toe_med_mo = [data_top[21][size], data_top[22][size], 0]
+    ff_med_mo = [data_top[23][size], data_top[24][size], 0]
+    mtpj1_dist2_mo = [data_top[25][size], data_top[26][size], 0]
+    mtpj1_dist1_mo = [data_top[27][size], data_top[28][size], 0]
+    mtpj1_mo = [data_top[29][size], data_top[30][size], 0]
+    mtpj1_prox_mo = [data_top[31][size], data_top[32][size], 0]
+    arch_medial_mo = [data_top[33][size], data_top[34][size], 0]
+    heel_medial_mo = [data_top[35][size], data_top[36][size], 0]
+    heel_center_medial_mo = [data_top[37][size], data_top[38][size], 0]
     
     ### create mid outline curve
     mid_outline = make_curve([heel_center_mo, heel_center_medial_mo, 
