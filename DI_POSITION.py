@@ -107,7 +107,7 @@ def DI_POSITION():
     # add shoe outline
     ## Get shoe size
     size = rs.ObjectsByLayer("Shoe_size")[0]
-    size = (int(rs.coerce3dpoint(size)[2]) * 2) + 1
+    size = int(rs.coerce3dpoint(size)[2]) + 1
     
     ## outline data
     f = open("C:/Users/telfe/Dropbox/Orthotic_Software/Offloading_Insoles/outlines2.txt")
