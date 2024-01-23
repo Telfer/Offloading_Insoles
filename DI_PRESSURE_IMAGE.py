@@ -21,6 +21,15 @@ def PRESSURE_IMAGE ():
         rs.MaximizeRestoreView(view = "Top")
         rs.ZoomExtents()
     
+    # set display mode
+    views = rs.ViewNames()
+    modes = rs.ViewDisplayModes()
+    viewtype = "Wireframe"
+    #rs.EnableRedraw(False)
+    if viewtype in modes:
+        for view in views:
+            rs.ViewDisplayMode(view, viewtype)
+    
     
     # =========================================================================
     

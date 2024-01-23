@@ -19,6 +19,18 @@ def DI_LANDMARKS():
     
     # =========================================================================
     
+    # set display mode
+    views = rs.ViewNames()
+    modes = rs.ViewDisplayModes()
+    viewtype = "Shaded"
+    #rs.EnableRedraw(False)
+    if viewtype in modes:
+        for view in views:
+            rs.ViewDisplayMode(view, viewtype)
+    
+    
+    # =========================================================================
+    
     # Identify foot scan
     scan = rs.ObjectsByLayer("Position scan")[0]
     rs.UnselectAllObjects()

@@ -152,6 +152,15 @@ def DI_BUILD():
         row = line.split()
         row[1] = float(row[1])
         row[2] = float(row[2])
+        row[3] = float(row[3])
+        row[4] = float(row[4])
+        row[5] = float(row[5])
+        row[6] = float(row[6])
+        row[7] = float(row[7])
+        row[8] = float(row[8])
+        row[9] = float(row[9])
+        row[10] = float(row[10])
+        row[11] = float(row[11])
         data_bottom.append(row)
     f.close()
     
@@ -162,12 +171,22 @@ def DI_BUILD():
         row = line.split()
         row[1] = float(row[1])
         row[2] = float(row[2])
+        row[3] = float(row[3])
+        row[4] = float(row[4])
+        row[5] = float(row[5])
+        row[6] = float(row[6])
+        row[7] = float(row[7])
+        row[8] = float(row[8])
+        row[9] = float(row[9])
+        row[10] = float(row[10])
+        row[11] = float(row[11])
         data_top.append(row)
     f.close()
     
     ## bottom outline
     ### bottom outline points
     heel_center = [0, data_bottom[0][size], 0]
+    heel_center_ = [0, data_bottom[0][size], 0]
     heel_center_lateral = [data_bottom[1][size], data_bottom[2][size], 0]
     heel_lateral = [data_bottom[3][size], data_bottom[4][size], 0]
     arch_lateral = [data_bottom[5][size], data_bottom[6][size], 0]
@@ -262,17 +281,17 @@ def DI_BUILD():
     mtpj5_mb = intersect_outline(mid_outline, mb_curve, side)[1]
     
     ### mtpj1 prox and mtpj5 prox
-    mb_curve_prox = rs.CopyObject(mb_curve, [0, -5, 0])
+    mb_curve_prox = rs.CopyObject(mb_curve, [0, -10, 0])
     mtpj1_mb_prox = intersect_outline(mid_outline, mb_curve_prox, side)[0]
     mtpj5_mb_prox = intersect_outline(mid_outline, mb_curve_prox, side)[1]
     
     ### mtpj1 dist1 and mtpj5 dist1
-    mb_curve_dist1 = rs.CopyObject(mb_curve, [0, 8, 0])
+    mb_curve_dist1 = rs.CopyObject(mb_curve, [0, 10, 0])
     mtpj1_mb_dist1 = intersect_outline(mid_outline, mb_curve_dist1, side)[0]
     mtpj5_mb_dist1 = intersect_outline(mid_outline, mb_curve_dist1, side)[1]
     
     ### mtpj1 dist1 and mtpj5 dist2
-    mb_curve_dist2 = rs.CopyObject(mb_curve, [0, 12, 0])
+    mb_curve_dist2 = rs.CopyObject(mb_curve, [0, 15, 0])
     mtpj1_mb_dist2 = intersect_outline(mid_outline, mb_curve_dist2, side)[0]
     mtpj5_mb_dist2 = intersect_outline(mid_outline, mb_curve_dist2, side)[1]
     
@@ -314,29 +333,29 @@ def DI_BUILD():
     ### mtpj2 points
     mtpj2 = [mtpj2_lm[0], mtpj2_lm[1], mtpj2_lm[2]]
     mtpj2_prox1 = point_on_line(mtpj2, arch_center_med_lm, -5)
-    mtpj2_prox1 = [mtpj2_prox1[0], mtpj2_prox1[1], mtpj2_prox1[2]]
-    mtpj2_prox2 = point_on_line(mtpj2, arch_center_med_lm, -10)
-    mtpj2_prox2 = [mtpj2_prox2[0], mtpj2_prox2[1], mtpj2_prox2[2]]
-    mtpj2_dist1 = [mtpj2[0], mtpj2[1] + 5, -3]
-    mtpj2_dist2 = [mtpj2[0], mtpj2[1] + 10, -4]
+    mtpj2_prox1 = [mtpj2_prox1[0], mtpj2_prox1[1], mtpj2_prox1[2] + 1]
+    mtpj2_prox2 = point_on_line(mtpj2, arch_center_med_lm, -12)
+    mtpj2_prox2 = [mtpj2_prox2[0], mtpj2_prox2[1], mtpj2_prox2[2] + 1]
+    mtpj2_dist1 = [mtpj2[0], mtpj2[1] + 8, -3]
+    mtpj2_dist2 = [mtpj2[0], mtpj2[1] + 12, -4]
     
     ### mtpj3 points
     mtpj3 = [mtpj3_lm[0], mtpj3_lm[1], mtpj3_lm[2]]
     mtpj3_prox1 = point_on_line(mtpj3, arch_center_lm, -5)
-    mtpj3_prox1 = [mtpj3_prox1[0], mtpj3_prox1[1], mtpj3_prox1[2]]
-    mtpj3_prox2 = point_on_line(mtpj3, arch_center_lm, -10)
-    mtpj3_prox2 = [mtpj3_prox2[0], mtpj3_prox2[1], mtpj3_prox2[2]]
-    mtpj3_dist1 = [mtpj3[0], mtpj3[1] + 5, -3]
-    mtpj3_dist2 = [mtpj3[0], mtpj3[1] + 10, -4]
+    mtpj3_prox1 = [mtpj3_prox1[0], mtpj3_prox1[1], mtpj3_prox1[2] + 1]
+    mtpj3_prox2 = point_on_line(mtpj3, arch_center_lm, -12)
+    mtpj3_prox2 = [mtpj3_prox2[0], mtpj3_prox2[1], mtpj3_prox2[2] + 1]
+    mtpj3_dist1 = [mtpj3[0], mtpj3[1] + 8, -3]
+    mtpj3_dist2 = [mtpj3[0], mtpj3[1] + 12, -4]
     
     ### mtpj4 points
     mtpj4 = [mtpj4_lm[0], mtpj4_lm[1], mtpj4_lm[2]]
     mtpj4_prox1 = point_on_line(mtpj4, arch_center_lat_lm, -5)
-    mtpj4_prox1 = [mtpj4_prox1[0], mtpj4_prox1[1], mtpj4_prox1[2]]
-    mtpj4_prox2 = point_on_line(mtpj4, arch_center_lat_lm, -10)
-    mtpj4_prox2 = [mtpj4_prox2[0], mtpj4_prox2[1], mtpj4_prox2[2]]
-    mtpj4_dist1 = [mtpj4[0], mtpj4[1] + 5, -3]
-    mtpj4_dist2 = [mtpj4[0], mtpj4[1] + 10, -4]
+    mtpj4_prox1 = [mtpj4_prox1[0], mtpj4_prox1[1], mtpj4_prox1[2] + 1]
+    mtpj4_prox2 = point_on_line(mtpj4, arch_center_lat_lm, -12)
+    mtpj4_prox2 = [mtpj4_prox2[0], mtpj4_prox2[1], mtpj4_prox2[2] + 1]
+    mtpj4_dist1 = [mtpj4[0], mtpj4[1] + 8, -3]
+    mtpj4_dist2 = [mtpj4[0], mtpj4[1] + 12, -4]
     
     ### mtpj5 points
     mtpj5 = [mtpj5_mb[0], mtpj5_mb[1], mtpj5_lm[2]]
@@ -344,53 +363,96 @@ def DI_BUILD():
     mtpj5_prox1 = [mtpj5_prox1[0], mtpj5_prox1[1], mtpj5[2]]
     mtpj5_prox2 = point_on_line(mtpj5, arch_lateral, -10)
     mtpj5_prox2 = [mtpj5_prox2[0], mtpj5_prox2[1], mtpj5[2]]
-    #mtpj5_prox = [mtpj5_prox[0], mtpj5_prox[1], mtpj5[2] + 1]
     mtpj5_dist1 = [mtpj5_mb_dist1[0], mtpj5_mb_dist1[1], -3]
     mtpj5_dist2 = [mtpj5_mb_dist2[0], mtpj5_mb_dist2[1], -4]
     
+    rs.AddPoint(mtpj5_dist1)
+    rs.AddPoint(mtpj5_dist2)
+    
     ### forefoot points
-    #mtpj_mid_prox = [mtpj3[0], mtpj3[1] - 1, mtpj3[2] + 0.5]
     mtpj_mid_prox = mtpj3_prox1
     mtpj_mid = mtpj3
     mtpj_mid_dist1 = [mtpj_mid[0], mtpj_mid[1] + 8, -3]
     mtpj_mid_dist2 = [mtpj_mid[0], mtpj_mid[1] + 12, -4]
     if side == "LEFT":
-        toe = [toe_pt_x[size + 1], toe_pt_y[size + 1], -4]
-        toe_med = [toe_med_x[size + 1], toe_med_y[size + 1], -4]
-        toe_lat = [toe_lat_x[size + 1], toe_lat_y[size + 1], -4]
-        toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] + 10, toe[1] -10, 0], [toe[0] + 10, toe[1] + 10, 0]))[0][1]
+        toe_ff = [toe_mo[0], toe_mo[1], -4]
+        ff_dist = toe_ff[1] - mtpj5_dist2[1]
+        ft_dist = toe_ff[1] - mtpj1_dist2[1]
+        toe_med_ff = [toe_med_mo[0], toe_med_mo[1], -4]
+        toe_lat_ff = [toe_lat_mo[0], toe_lat_mo[1], -4]
+        toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0] + 10, toe_ff[1] -10, 0], [toe_ff[0] + 10, toe_ff[1] + 10, 0]))[0][1]
         toe_med1[2] = -4
-        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] - 10, toe[1] -10, 0], [toe[0] - 10, toe[1] + 10, 0]))[0][1]
+        toe_med2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.1], [toe_ff[0] + 100, toe_ff[1] - ft_dist * 0.1]))[0][1]  
+        toe_med2[2] = -4
+        toe_med3 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.2], [toe_ff[0] + 100, toe_ff[1] - ft_dist * 0.2]))[0][1]    
+        toe_med3[2] = -4
+        toe_med4 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.4], [toe_ff[0] + 100, toe_ff[1] - ft_dist * 0.4]))[0][1]    
+        toe_med4[2] = -4
+        toe_med5 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.8], [toe_ff[0] + 100, toe_ff[1] - ft_dist * 0.8]))[0][1]    
+        toe_med5[2] = -4
+        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0] - 10, toe_ff[1] -10, 0], [toe_ff[0] - 10, toe_ff[1] + 10, 0]))[0][1]
         toe_lat1[2] = -4
-        ff_med = [ff_med_x[size + 1], ff_med_y[size + 1], -4]
-        ff_lat = [ff_lat_x[size + 1], ff_lat_y[size + 1], -4]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 10, -4]
+        toe_lat2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.1], [toe_ff[0] - 100, toe_ff[1] - ff_dist * 0.1]))[0][1]    
+        toe_lat2[2] = -4
+        toe_lat3 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.2], [toe_ff[0] - 100, toe_ff[1] - ff_dist * 0.2]))[0][1]    
+        toe_lat3[2] = -4
+        toe_lat4 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.4], [toe_ff[0] - 100, toe_ff[1] - ff_dist * 0.4]))[0][1]    
+        toe_lat4[2] = -4
+        toe_lat5 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.8], [toe_ff[0] - 100, toe_ff[1] - ff_dist * 0.8]))[0][1]  
+        toe_lat5[2] = -4
+        ff_med_ff = [mtpj1_dist2_mo[0], mtpj1_dist2_mo[1], -4]
+        ff_lat_ff = [mtpj5_dist2_mo[0], mtpj5_dist2_mo[1], -4]
+        #ff_mid_ff = [(ff_med_ff[0] + ff_lat_ff[0]) / 2, mtpj3_dist2[1] + 10, -4]
+        ff_mid_ff = [(toe_med3[0] + toe_lat3[0]) / 2, mtpj3_dist2[1] + 15, -4]
     else:
-        toe = [toe_pt_x[size + 1] * - 1, toe_pt_y[size + 1], -4]
-        toe_med = [toe_med_x[size + 1] * -1, toe_med_y[size + 1], -4]
-        toe_lat = [toe_lat_x[size + 1] * -1, toe_lat_y[size + 1], -4]
-        toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] - 10, toe[1] -10, 0], [toe[0] - 10, toe[1] + 10, 0]))[0][1]
+        toe_ff = [toe_mo[0] * - 1, toe_mo[1], -4]
+        ff_dist = toe_ff[1] - mtpj5_dist2[1]
+        ft_dist = toe_ff[1] - mtpj1_dist2[1]
+        toe_med_ff = [toe_med_mo[0] * -1, toe_med_mo[1], -4]
+        toe_lat_ff = [toe_lat_mo[0] * -1, toe_lat_mo[1], -4]
+        toe_med1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0] - 10, toe_ff[1] -10, 0], [toe_ff[0] - 10, toe_ff[1] + 10, 0]))[0][1]
         toe_med1[2] = -4
-        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe[0] + 10, toe[1] -10, 0], [toe[0] + 10, toe[1] + 10, 0]))[0][1]
+        toe_med2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.1], [toe_ff[0] - 100, toe_ff[1] - ft_dist * 0.1]))[0][1]
+        #toe_med2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] -30, 0], [toe_ff[0] - 100, toe_ff[1] -30, 0]))[0][1]
+        toe_med2[2] = -4
+        toe_med3 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.2], [toe_ff[0] - 100, toe_ff[1] - ft_dist * 0.2]))[0][1]
+        #toe_med3 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] -50, 0], [toe_ff[0] - 100, toe_ff[1] -50, 0]))[0][1]
+        toe_med3[2] = -4
+        toe_med4 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.4], [toe_ff[0] - 100, toe_ff[1] - ft_dist * 0.4]))[0][1]
+        toe_med4[2] = -4
+        toe_med5 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.8], [toe_ff[0] - 100, toe_ff[1] - ft_dist * 0.8]))[0][1]
+        toe_med5[2] = -4
+        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0] + 10, toe_ff[1] -10, 0], [toe_ff[0] + 10, toe_ff[1] + 10, 0]))[0][1]
         toe_lat1[2] = -4
-        ff_med = [ff_med_x[size + 1] * -1, ff_med_y[size + 1], -4]
-        ff_lat = [ff_lat_x[size + 1] * -1, ff_lat_y[size + 1], -4]
-        ff_mid = [(ff_med[0] + ff_lat[0]) / 2, mtpj3_dist2[1] + 15, -4]
+        toe_lat2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.1], [toe_ff[0] + 100, toe_ff[1] - ff_dist * 0.1]))[0][1]    
+        #toe_lat2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] -30, 0], [toe_ff[0] + 100, toe_ff[1] -30, 0]))[0][1]
+        toe_lat2[2] = -4
+        toe_lat3 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.2], [toe_ff[0] + 100, toe_ff[1] - ff_dist * 0.2]))[0][1]    
+        #toe_lat3 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] -60, 0], [toe_ff[0] + 100, toe_ff[1] -50, 0]))[0][1]
+        toe_lat3[2] = -4
+        toe_lat4 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.4], [toe_ff[0] + 100, toe_ff[1] - ff_dist * 0.4]))[0][1]    
+        toe_lat4[2] = -4
+        toe_lat5 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.8], [toe_ff[0] + 100, toe_ff[1] - ff_dist * 0.8]))[0][1]
+        toe_lat5[2] = -4
+        ff_med_ff = [mtpj1_dist2_mo[0] * -1, mtpj1_dist2_mo[1], -4]
+        ff_lat_ff = [mtpj5_dist2_mo[0] * -1, mtpj5_dist2_mo[1], -4]
+        ff_mid_ff = [(toe_med3[0] + toe_lat3[0]) / 2, mtpj3_dist2[1] + 15, -4]
+        #ff_mid_ff = [(ff_med_ff[0] + ff_lat_ff[0]) / 2, mtpj3_dist2[1] + 15, -4]
     
     ### heel points
-    heel_center = [0, heel_center_pt_y[size + 1], heel_cup_height]
+    heel_center = [0, heel_center_mo[1], heel_cup_height]
     heel_mid_post = [heel_center[0], heel_center[1] +5, heel_cup_height - 6]
-    heel_mid = [0, (heel_medial[1] + heel_lateral[1]) / 2, 0]
+    heel_mid = [0, (heel_medial_mo[1] + heel_lateral_mo[1]) / 2, 0]
     if side == "LEFT":
-        heel_lateral = [heel_lateral_pt_x[size + 1], -100, heel_cup_height]
-        heel_medial = [heel_medial_pt_x[size + 1], -100, heel_cup_height]
+        heel_lateral = [heel_lateral_mo[0], -100, heel_cup_height]
+        heel_medial = [heel_medial_mo[0], -100, heel_cup_height]
         heel_center_medial = [heel_center[0] + 18, heel_center[1] + 5, heel_cup_height]
         heel_center_lateral = [heel_center[0] - 15, heel_center[1] + 5, heel_cup_height]
         heel_midm = [heel_mid[0] + 15, heel_mid[1], 2]
         heel_midl = [heel_mid[0] - 15, heel_mid[1], 2]
     else:
-        heel_lateral = [heel_lateral_pt_x[size + 1] * -1, -100, heel_cup_height]
-        heel_medial = [heel_medial_pt_x[size + 1] * -1, -100, heel_cup_height]
+        heel_lateral = [heel_lateral_mo[0] * -1, -100, heel_cup_height]
+        heel_medial = [heel_medial_mo[0] * -1, -100, heel_cup_height]
         heel_center_medial = [(heel_center[0] * - 1) - 18, heel_center[1] + 5, heel_cup_height]
         heel_center_lateral = [(heel_center[0] * - 1) + 15, heel_center[1] + 5, heel_cup_height]
         heel_midm = [(heel_mid[0] * - 1) - 15, heel_mid[1], 2]
@@ -406,17 +468,19 @@ def DI_BUILD():
     ### construct medial curve
     medial_curve = make_curve([heel_center, heel_center_medial, heel_medial, 
                                arch_medial, mtpj1_prox2, mtpj1_prox1, mtpj1, mtpj1_dist1, 
-                               mtpj1_dist2, ff_med, toe_med, toe_med1, toe])
+                               mtpj1_dist2, toe_med5, toe_med4, toe_med3, 
+                               toe_med2, toe_med1, toe_ff])
     
     ### construct lateral curve
-    lateral_curve = make_curve([toe, toe_lat1, toe_lat, ff_lat, mtpj5_dist2, mtpj5_dist1, 
+    lateral_curve = make_curve([toe_ff, toe_lat1, toe_lat2, toe_lat3, toe_lat4, 
+                                toe_lat5, mtpj5_dist2, mtpj5_dist1,
                                 mtpj5, mtpj5_prox1, mtpj5_prox2, arch_lateral, heel_lateral, 
                                 heel_center_lateral, heel_center])
     
     ### construct central curve (runs along long axis of foot)
     central_curve = make_curve([heel_center, heel_mid_post, heel_mid, arch_center,
                                 mtpj3_prox2, mtpj_mid_prox, mtpj_mid, mtpj_mid_dist1,
-                                mtpj_mid_dist2, ff_mid, toe])
+                                mtpj_mid_dist2, ff_mid_ff, toe_ff])
     
     ### construct arch curve (runs mediolateral across arch of foot)
     arch_curve = make_curve([arch_medial, arch_center_med, arch_center,
@@ -432,7 +496,7 @@ def DI_BUILD():
                                   mtpj4_dist1, mtpj5_dist1])
     forefoot_curve4 = make_curve([mtpj1_dist2, mtpj2_dist2, mtpj3_dist2, 
                                   mtpj4_dist2, mtpj5_dist2])
-    forefoot_curve5 = make_curve([ff_lat, ff_mid, ff_med])
+    forefoot_curve5 = make_curve([toe_lat5, ff_mid_ff, toe_med5])
     
     ### construct heel curve
     cross_curve_heel = make_curve([heel_medial, heel_midm, heel_mid, heel_midl, 
@@ -463,7 +527,7 @@ def DI_BUILD():
     rs.RebuildCurve(mid_outline2, point_count = 100)
     mid_outline2 = rs.MoveObject(mid_outline2, [0, 0, -6])
     arc1 = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
-                        [heel_center[0], heel_center_pt_y[size], -10], 
+                        [heel_center_[0], heel_center_[1], -10], 
                         [0, heel_center_mo[1] + 1.6, -7.9])
     rs.RebuildCurve(arc1)
     mtpj1_arc_mo = lm_plane_inter(mid_outline2, mtpj1[1], side, "med")

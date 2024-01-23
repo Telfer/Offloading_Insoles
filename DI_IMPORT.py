@@ -86,6 +86,18 @@ def DI_IMPORT():
     
     # =========================================================================
     
+    # set display mode
+    views = rs.ViewNames()
+    modes=rs.ViewDisplayModes()
+    viewtype="Shaded"
+    #rs.EnableRedraw(False)
+    if viewtype in modes:
+        for view in views:
+            rs.ViewDisplayMode(view, viewtype)
+    
+    
+    # =========================================================================
+    
     # Layer housekeeping
     rs.CurrentLayer("Position scan")
     rs.LayerVisible("Shoe_size", False)
