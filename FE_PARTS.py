@@ -76,7 +76,8 @@ def FE_parts():
         rs.Command('-_Export "{}" _Enter _Enter'.format(ffp))
     
     def meshBoolSplit(x, y, dir):
-        cmd_str = ("-_MeshBooleanSplit SelID " + str(x) + 
+        rs.UnselectAllObjects()
+        cmd_str = ("-_MeshBooleanSplit SelID " + str(x) +
                    " _Enter SelID " + str(y) + " _Enter")
         rs.Command(cmd_str)
         cut_scan = rs.LastCreatedObjects()
@@ -155,6 +156,20 @@ def FE_parts():
         
         rs.DeleteObject(vline)
         return int_point
+    
+    def resample_mesh(obj):
+        rs.UnselectAllObjects()
+        rs.SelectObject(obj)
+        rs.Command("-_QuadRemesh" + " _Enter")
+        rr = rs.LastCreatedObjects()[0]
+        #rrs = rs.MeshQuadsToTriangles(rr)
+        rs.DeleteObjects([obj])
+        return rr
+    
+    def tri_mesh(mesh):
+        rs.MeshQuadsToTriangles(mesh)
+        rr = rs.LastObject()
+        return rr
     
     
     # =========================================================================
@@ -372,6 +387,13 @@ def FE_parts():
     MTH1 = rs.BooleanUnion([MTH1, L_ses, M_ses])
     MTH1_ = rs.CopyObject(MTH1)
     
+    ## make mets surfaces
+    MTH1 = resample_mesh(MTH1)
+    MTH2 = resample_mesh(MTH2)
+    MTH3 = resample_mesh(MTH3)
+    MTH4 = resample_mesh(MTH4)
+    MTH5 = resample_mesh(MTH5)
+    
     
     # =========================================================================
     
@@ -436,6 +458,7 @@ def FE_parts():
                                     curve_MT4, curve_MT5, curve_lat], 
                                     loft_type = 2)
     dorsal_surface = rs.MoveObject(dorsal_surface, [0, 0, -1])
+    dorsal_surface = resample_mesh(dorsal_surface)
     
     ## Distal cut
     distal_curve = rs.AddPolyline([[MLD_1_ofs, MAP_1 * -1 + (MTHw_1 / 2) + 5, MT1_dist_h], 
@@ -467,6 +490,7 @@ def FE_parts():
                       curve_MT1, curve_MT2, curve_MT3, curve_MT4, curve_MT5])
     
     ## trim insole
+    insole_FE = resample_mesh(insole_FE)
     insole_FE = meshBoolSplit(insole_FE, distal_surface2, "prox")
     insole_FE = meshBoolSplit(insole_FE, proximal_surface2, "dist")
     
@@ -475,12 +499,12 @@ def FE_parts():
     scanFE = meshBoolSplit(scanFE, proximal_surface, "dist")
     rs.HideObjects([distal_surface, proximal_surface, distal_surface2, proximal_surface2])
     soft_tissue_FE = meshBoolSplit(scanFE, dorsal_surface, "plant")
-    soft_tissue_FE = meshBoolDiff(soft_tissue_FE, MTH1[0])
+    rs.HideObject(dorsal_surface)
+    soft_tissue_FE = meshBoolDiff(soft_tissue_FE, MTH1)
     soft_tissue_FE = meshBoolDiff(soft_tissue_FE[0], MTH2)
     soft_tissue_FE = meshBoolDiff(soft_tissue_FE[0], MTH3)
     soft_tissue_FE = meshBoolDiff(soft_tissue_FE[0], MTH4)
     soft_tissue_FE = meshBoolDiff(soft_tissue_FE[0], MTH5)
-    rs.HideObject(dorsal_surface)
     
     
     # =========================================================================
