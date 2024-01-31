@@ -72,19 +72,19 @@ def DI_BUILD():
     def lm_plane_inter(curve, point, side, ml):
         if side == "RIGHT" and ml == "med":
             plane_crv = rs.AddPolyline([[-100, point, 10], [0, point, 10], 
-                                        [0, point, -10], [-100, point, -10], 
+                                        [0, point, -11], [-100, point, -11], 
                                         [-100, point, 10]])
         if side == "RIGHT" and ml == "lat":
             plane_crv = rs.AddPolyline([[100, point, 10], [0, point, 10], 
-                                        [0, point, -10], [100, point, -10], 
+                                        [0, point, -11], [100, point, -11], 
                                         [100, point, 10]])
         if side == "LEFT" and ml == "med":
             plane_crv = rs.AddPolyline([[100, point, 10], [0, point, 10], 
-                                        [0, point, -10], [100, point, -10], 
+                                        [0, point, -11], [100, point, -11], 
                                         [100, point, 10]])
         if side == "LEFT" and ml == "lat":
             plane_crv = rs.AddPolyline([[-100, point, 10], [0, point, 10], 
-                                        [0, point, -10], [-100, point, -10], 
+                                        [0, point, -11], [-100, point, -11], 
                                         [-100, point, 10]])
         plane = rs.AddPlanarSrf(plane_crv)
         intersect_pt = rs.CurveBrepIntersect(curve, plane)[1]
@@ -509,7 +509,7 @@ def DI_BUILD():
     # =========================================================================
     
     # bottom surface
-    bottom_outline = rs.MoveObject(bottom_outline, [0, 0, -10])
+    bottom_outline = rs.MoveObject(bottom_outline, [0, 0, -11])
     bottom = rs.AddPlanarSrf([bottom_outline])
     
     
@@ -520,7 +520,7 @@ def DI_BUILD():
     rs.RebuildCurve(mid_outline2, point_count = 100)
     mid_outline2 = rs.MoveObject(mid_outline2, [0, 0, -6])
     arc1 = rs.AddArc3Pt([0, heel_center_mo[1], -6], 
-                        [heel_center_[0], heel_center_[1], -10], 
+                        [heel_center_[0], heel_center_[1], -11], 
                         [0, heel_center_mo[1] + 1.6, -7.9])
     rs.RebuildCurve(arc1)
     mtpj1_arc_mo = lm_plane_inter(mid_outline2, mtpj1[1], side, "med")
@@ -556,6 +556,11 @@ def DI_BUILD():
     
     ## delete curves
     rs.DeleteObjects(rs.ObjectsByType(4))
+    
+    ## trim bottom
+    box = rs.AddBox([[200, 200, -20], [-200, 200, -20], [-200, -200, -20], [200, -200, -20],
+                     [200, 200, -10.9], [-200, 200, -10.9], [-200, -200, -10.9], [200, -200, -10.9]])
+    FO = rs.BooleanDifference(FO, box)
     
     ## tidy up layers
     rs.LayerVisible("Heel Medial", False)
