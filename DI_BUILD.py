@@ -417,7 +417,8 @@ def DI_BUILD():
         toe_med4[2] = -4
         toe_med5 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ft_dist * 0.8], [toe_ff[0] - 100, toe_ff[1] - ft_dist * 0.8]))[0][1]
         toe_med5[2] = -4
-        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0] + 10, toe_ff[1] -10, 0], [toe_ff[0] + 10, toe_ff[1] + 10, 0]))[0][1]
+        toe_lat1 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0] + 20, toe_ff[1] -10, 0], [toe_ff[0] + 20, toe_ff[1] + 10, 0]))[0][1]
+        #print toe_lat1
         toe_lat1[2] = -4
         toe_lat2 = rs.CurveCurveIntersection(mid_outline, rs.AddLine([toe_ff[0], toe_ff[1] - ff_dist * 0.1], [toe_ff[0] + 100, toe_ff[1] - ff_dist * 0.1]))[0][1]    
         toe_lat2[2] = -4
