@@ -316,6 +316,7 @@ def DI_BUILD():
                                arch_lateral_lm[2]]
     arch_medial = pointFromMeshCurveInt([arch_medial_lm, arch_medial_offset], 
                                          mid_outline, scan)
+    #arch_medial[2] = arch_medial[2] - 10
     
     ### lateral arch points
     arch_lateral = lm_inter(mid_outline, arch_lateral_lm[1], dir2)
