@@ -125,6 +125,7 @@ def DI_POSITION():
         row[9] = float(row[9])
         row[10] = float(row[10])
         row[11] = float(row[11])
+        row[12] = float(row[12])
         data.append(row)
     f.close()
 
